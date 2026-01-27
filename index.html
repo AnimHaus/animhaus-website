@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AnimHous | Cinematic Excellence</title>
+    <title>AnimHaus | Cinematic Excellence</title>
     
     <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -46,51 +46,48 @@
             width: 100%; 
             top: 0; 
             z-index: 1000;
-            mix-blend-mode: difference; 
-            color: white;
         }
         
-        .logo { 
-            font-weight: 900; 
-            font-size: 1.2rem; 
-            letter-spacing: -1px; 
-        }
-        
-        .nav-links { 
-            display: none;
-            list-style: none; 
-            gap: 20px; 
-        }
-        
-        .nav-links a { 
-            text-decoration: none; 
-            color: inherit; 
-            font-size: 0.7rem; 
-            font-weight: 700; 
-            text-transform: uppercase; 
+        .logo-main {
+            width: 50px;
+            height: 50px;
+            transition: all 0.3s ease;
         }
 
-        /* Mobile Menu Toggle */
-        .menu-toggle {
-            display: block;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            z-index: 1001;
+        .logotype {
+            height: 40px;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            opacity: 1;
+            transform: translateX(0);
+            height: 5rem;
+        }
+
+        .logotype.hidden {
+            opacity: 0;
+            transform: translateX(20px);
+            pointer-events: none;
         }
 
         /* Tablet Navigation */
         @media (min-width: 768px) {
-            .logo { font-size: 1.5rem; }
             nav { padding: 25px 5%; }
-            .nav-links { display: flex; gap: 25px; }
-            .menu-toggle { display: none; }
+            .logo-main {
+                width: 60px;
+                height: 60px;
+            }
+            .logotype {
+                height: 50px;
+            }
         }
 
         @media (min-width: 1024px) {
-            .nav-links { gap: 30px; }
+            .logo-main {
+                width: 70px;
+                height: 70px;
+            }
+            .logotype {
+                height: 60px;
+            }
         }
 
         /* Hero Section */
@@ -151,7 +148,7 @@
 
         /* Section Global Styling */
         section { 
-            padding: 40px 5%; 
+            padding: 80px 5%; 
             position: relative; 
         }
 
@@ -160,7 +157,7 @@
         }
 
         @media (min-width: 1024px) {
-            section { padding: 60px 10%; }
+            section { padding: 80px 10%; }
         }
         
         .outline-bg {
@@ -249,8 +246,7 @@
         /* Showreel */
         #showreel { 
             padding: 30px 5%; 
-            background: var(--black); 
-            color: var(--white); 
+            color: var(--black); 
             overflow: hidden; 
         }
 
@@ -267,7 +263,7 @@
             aspect-ratio: 16/9; 
             background: #222; 
             position: relative; 
-            border-radius: 8px; 
+            border-radius: 20px; 
             overflow: hidden; 
             cursor: pointer; 
         }
@@ -584,12 +580,6 @@
         }
 
         .footer-col a:hover { color: var(--red); }
-        
-        .footer-logo { 
-            font-weight: 900; 
-            font-size: 1.2rem; 
-            margin-bottom: 15px; 
-        }
 
         .newsletter-row {
             display: grid;
@@ -691,70 +681,22 @@
             }
         }
 
-        /* Mobile Menu Overlay */
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: var(--black);
-            z-index: 999;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 30px;
-        }
-
-        .mobile-menu.active {
-            display: flex;
-        }
-
-        .mobile-menu a {
-            color: white;
-            text-decoration: none;
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        @media (min-width: 768px) {
-            .mobile-menu { display: none !important; }
-        }
-
     </style>
 </head>
 <body>
     <nav>
-        <div class="logo">ANIMHOUS</div>
-        <ul class="nav-links">
-            <li><a href="#about">About</a></li>
-            <li><a href="#showreel">Showreel</a></li>
-            <li><a href="#works">Works</a></li>
-            <li><a href="#team">Team</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-        <button class="menu-toggle" aria-label="Toggle menu">
-            <i class="fas fa-bars"></i>
-        </button>
+        <!-- Main Logo (Left Side) -->
+        <img src="/logo.svg" alt="">
+        <!-- Logotype (Right Side) -->
+        <img src="/animhaus-logotype.svg" alt="logo-type" class="logotype">
     </nav>
-
-    <div class="mobile-menu">
-        <a href="#about">About</a>
-        <a href="#showreel">Showreel</a>
-        <a href="#works">Works</a>
-        <a href="#team">Team</a>
-        <a href="#contact">Contact</a>
-    </div>
 
     <section id="hero">
         <div class="hero-bg"></div>
         <div class="hero-content">
             <h1 class="hero-title">BEYOND</h1>
             <h1 class="hero-title" style="color: var(--red);">REALITY</h1>
-            <div class="hero-sub">AnimHous Studios 2026</div>
+            <div class="hero-sub">AnimHaus Studios 2026</div>
         </div>
     </section>
 
@@ -856,10 +798,10 @@
         </div>
     </section>
 
-    <section id="contact">
+    <section id="contact" style="padding-top: 120px; padding-bottom: 120px">
         <div class="contact-left reveal">
             <h2>GET IN<br>THE HOUSE</h2>
-            <p>hello@animhous.com</p>
+            <p>hello@animhaus.com</p>
         </div>
         <form class="reveal">
             <input type="text" placeholder="FULL NAME" required>
@@ -872,13 +814,13 @@
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
-                <div class="footer-logo">ANIMHOUS</div>
+                <img src="/animhaus-logotype.svg" alt="logo-type" class="logotype">
                 <p>STUDIO</p>
             </div>
             <div class="footer-col">
                 <h3>Contact</h3>
                 <p>+81 03 1234 5678</p>
-                <p>hello@animhous.com</p>
+                <p>hello@animhaus.com</p>
             </div>
             <div class="footer-col">
                 <h3>Follow us on</h3>
@@ -899,29 +841,25 @@
         </div>
 
         <div class="footer-bottom">
-            © 2026 THE ANIMHOUS COLLECTION. ALL RIGHTS RESERVED.
+            © 2026 THE ANIMHAUS COLLECTION. ALL RIGHTS RESERVED.
         </div>
     </footer>
 
     <script>
-        // Mobile Menu Toggle
-        const menuToggle = document.querySelector('.menu-toggle');
-        const mobileMenu = document.querySelector('.mobile-menu');
-        const mobileLinks = document.querySelectorAll('.mobile-menu a');
-
-        menuToggle.addEventListener('click', () => {
-            mobileMenu.classList.toggle('active');
-            const icon = menuToggle.querySelector('i');
-            icon.classList.toggle('fa-bars');
-            icon.classList.toggle('fa-times');
-        });
-
-        mobileLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.remove('active');
-                menuToggle.querySelector('i').classList.add('fa-bars');
-                menuToggle.querySelector('i').classList.remove('fa-times');
-            });
+        // Logotype hide on scroll
+        let lastScrollTop = 0;
+        const logotype = document.querySelector('.logotype');
+        
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > 100) {
+                logotype.classList.add('hidden');
+            } else {
+                logotype.classList.remove('hidden');
+            }
+            
+            lastScrollTop = scrollTop;
         });
 
         // Smooth Scroll
@@ -981,14 +919,47 @@
 
         // Outline text parallax
         if (window.innerWidth >= 768) {
-            gsap.to(".outline-bg", {
-                scrollTrigger: { 
-                    trigger: ".outline-bg", 
-                    scrub: 1 
-                },
-                x: 150
+            gsap.utils.toArray(".outline-bg").forEach((el) => {
+                gsap.fromTo(
+                    el,
+                    { x: 0 },
+                    {
+                        x: 150,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: el,
+                            start: "top 90%",
+                            end: "bottom 10%",
+                            scrub: true
+                        }
+                    }
+                );
             });
         }
+        // Showreel width transform on scroll
+        const reel = document.querySelector(".video-container");
+
+        gsap.fromTo(
+            reel,
+            {
+                scaleX: 0.85,
+                transformOrigin: "center center"
+            },
+            {
+                scaleX: 1,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: reel,
+                
+                    // 👇 percent-based visibility
+                    start: "top 100%",   // ~5% visible
+                    end: "top 75%",     // ~25% visible
+                
+                    scrub: true,
+                    markers: false
+                }
+            }
+        );
     </script>
 </body>
 </html>
