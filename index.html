@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AnimHaus | Cinematic Excellence</title>
     
+    
     <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -46,46 +47,55 @@
             width: 100%; 
             top: 0; 
             z-index: 1000;
+            /* Add transition for background and padding */
+            transition: background-color 0.4s ease, backdrop-filter 0.4s ease, padding 0.4s ease;
         }
-        
-        .logo-main {
-            width: 50px;
-            height: 50px;
-            transition: all 0.3s ease;
+
+        /* This class will be toggled via JS */
+        nav.scrolled {
+            background-color: rgba(255, 255, 255, 0.8); /* Translucent white */
+            backdrop-filter: blur(10px); /* Modern frosted glass effect */
+            padding: 10px 5%; /* Shrink navbar height slightly on scroll */
+            justify-content: center; /* Center the mascot */
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .logomascot {
+            height: 3rem;
+            transform: translateX(0);
+            transition: transform 0.4s ease;
         }
 
         .logotype {
-            height: 40px;
             transition: opacity 0.5s ease, transform 0.5s ease;
             opacity: 1;
-            transform: translateX(0);
             height: 3rem;
         }
 
         .logotype.hidden {
             opacity: 0;
             transform: translateX(20px);
+            width: 0; /* Ensures it doesn't take up space when hidden */
+            margin: 0;
             pointer-events: none;
         }
 
         /* Tablet Navigation */
         @media (min-width: 768px) {
             nav { padding: 25px 5%; }
-            .logo-main {
-                width: 60px;
-                height: 60px;
-            }
             .logotype {
+                height: 50px;
+            }
+            .logomascot{
                 height: 50px;
             }
         }
 
         @media (min-width: 1024px) {
-            .logo-main {
-                width: 70px;
-                height: 70px;
-            }
             .logotype {
+                height: 60px;
+            }
+            .logomascot{
                 height: 60px;
             }
         }
@@ -95,33 +105,42 @@
             height: 100vh; 
             min-height: 600px;
             display: flex; 
-            align-items: center; 
-            justify-content: center;
+            /* Changed from center center to bottom left */
+            align-items: flex-end; 
+            justify-content: flex-start; 
             background: var(--black); 
             overflow: hidden; 
             position: relative;
+            padding: 0 0 10vh 8%;
         }
         
         .hero-bg {
             position: absolute; 
+            top: 0;
+            left: 0;
             width: 100%; 
             height: 100%;
+            /* Ensure image fills everything regardless of container padding */
             background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), 
-                        url('https://images.unsplash.com/photo-1618331835717-801e976710b2?q=80&w=2000');
+                        url('/zoros-dream.png');
             background-size: cover; 
-            background-position: center; 
-            filter: grayscale(20%);
+            background-position: center;
+        }
+
+        @media (max-width: 500px) {
+            .hero-bg {
+                background-position: 75% center;
+            }
         }
         
         .hero-content { 
-            text-align: center; 
+            text-align: left; 
             z-index: 2; 
             color: var(--white);
-            padding: 0 5%;
         }
         
         .hero-title { 
-            font-size: clamp(2.5rem, 15vw, 8rem); 
+            font-size: clamp(3rem, 15vw, 9rem); 
             font-weight: 900; 
             text-transform: uppercase; 
             line-height: 0.8; 
@@ -684,10 +703,8 @@
     </style>
 </head>
 <body>
-    <nav>
-        <!-- Main Logo (Left Side) -->
-        <img src="/logo.svg" alt="">
-        <!-- Logotype (Right Side) -->
+    <nav class="navbar">
+        <img src="/animhaus-mascot.svg" class="logomascot" />
         <img src="/animhaus-logotype.svg" alt="logo-type" class="logotype">
     </nav>
 
@@ -814,8 +831,7 @@
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
-                <img src="/animhaus-logotype.svg" alt="logo-type" class="logotype">
-                <p>STUDIO</p>
+                <img src="/animhaus-logo-mascot.png" alt="logo-type" class="logomascot">
             </div>
             <div class="footer-col">
                 <h3>Contact</h3>
@@ -848,14 +864,17 @@
     <script>
         // Logotype hide on scroll
         let lastScrollTop = 0;
+        const navbar = document.querySelector('nav');
         const logotype = document.querySelector('.logotype');
         
         window.addEventListener('scroll', () => {
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             
             if (scrollTop > 100) {
+                navbar.classList.add('scrolled');
                 logotype.classList.add('hidden');
             } else {
+                navbar.classList.remove('scrolled');
                 logotype.classList.remove('hidden');
             }
             
