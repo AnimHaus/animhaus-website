@@ -1,0 +1,16 @@
+{
+  "race-against-time": {
+    "title": "Race Against Time",
+    "tagline": "A visual metaphor of modern life running faster than the clock.",
+    "year": "2026",
+    "category": "Editorial Illustration",
+    "theme": "Time · Anxiety · Modern Work Culture",
+    "description": "This artwork represents the constant pressure of deadlines in modern society. The character is shown physically running away from time itself, symbolizing burnout, urgency, and chaos.",
+    "cover": "https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/race_against_time/race_against_time.webp",
+    "credits": {
+      "Illustration": "AnimHaus Studio",
+      "Concept": "Abiskar Das",
+      "Tools": "Illustrator · Photoshop"
+    }
+  }
+}
