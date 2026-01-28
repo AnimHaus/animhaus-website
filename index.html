@@ -707,8 +707,8 @@
         }
 
         .footer-bottom {
-            background: var(--black);
-            color: #888;
+            /* background: var(--black); */
+            color: #444;
             padding: 20px 5%;
             margin: 0 -5%; 
             text-align: center;
@@ -896,13 +896,13 @@
     <section id="contact" style="padding-top: 120px; padding-bottom: 120px">
         <div class="contact-left reveal">
             <h2>GET IN<br>THE HOUSE</h2>
-            <p>hello@animhaus.com</p>
+            <p>appleboy285@gmail.com</p>
         </div>
-        <form class="reveal">
-            <input type="text" placeholder="FULL NAME" required>
-            <input type="email" placeholder="EMAIL ADDRESS" required>
-            <textarea rows="4" placeholder="TELL US THE VISION" required></textarea>
-            <button type="submit" class="submit-btn">Start Project</button>
+        <form id="contactForm" class="reveal">
+          <input type="text" name="name" placeholder="FULL NAME" required>
+          <input type="email" name="email" placeholder="EMAIL ADDRESS" required>
+          <textarea name="message" rows="4" placeholder="TELL US THE VISION" required></textarea>
+          <button type="submit" class="submit-btn">Start Project</button>
         </form>
     </section>
 
@@ -913,8 +913,7 @@
             </div>
             <div class="footer-col">
                 <h3>Contact</h3>
-                <p>+81 03 1234 5678</p>
-                <p>hello@animhaus.com</p>
+                <p>appleboy285@gmail.com</p>
             </div>
             <div class="footer-col">
                 <h3>Follow us on</h3>
@@ -1056,10 +1055,24 @@
                 }
             }
         );
+
+        document.getElementById("contactForm").addEventListener("submit", async e => {
+          e.preventDefault();
+
+          const formData = new FormData(e.target);
+
+          await fetch("https://formsubmit.co/ajax/appleboy285@gmail.com", {
+            method: "POST",
+            body: formData
+          });
+
+          alert("Message sent successfully!");
+        });
     </script>
 </body>
 
 </html>
+
 
 
 
