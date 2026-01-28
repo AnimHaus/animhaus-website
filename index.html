@@ -1,777 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AnimHaus | Cinematic Excellence</title>
-    
-    
-    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script> 
+    <link rel="icon" href="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/animhaus-mascot.ico">
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-
-    <style>
-        :root {
-            --white: #ffffff;
-            --black: #111111;
-            --red: #D91A21;
-            --light: #f9f9f9;
-        }
-
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: 'Inter', sans-serif; 
-        }
-        
-        body { 
-            background-color: var(--white); 
-            color: var(--black); 
-            line-height: 1.4; 
-            overflow-x: hidden; 
-        }
-
-        /* Smooth Scroll */
-        html.lenis { height: auto; }
-        .lenis-smooth { scroll-behavior: auto !important; }
-
-        /* Navigation */
-        nav {
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            padding: 20px 5%; 
-            position: fixed; 
-            width: 100%; 
-            top: 0; 
-            z-index: 1000;
-            /* Add transition for background and padding */
-            transition: background-color 0.4s ease, backdrop-filter 0.4s ease, padding 0.4s ease;
-        }
-
-        /* This class will be toggled via JS */
-        nav.scrolled {
-            padding: 10px 5%;
-            /* Remove justify-content: center to keep mascot on the left */
-            justify-content: flex-start; 
-        }
-
-        .logomascot {
-            height: 3rem;
-            transition: transform 0.4s ease, filter 0.4s ease;
-            filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.1));
-        }
-
-        nav.scrolled .logomascot {
-            filter: drop-shadow(0px 6px 12px rgba(217, 26, 33, 0.3)); /* Tinted shadow matching your red */
-        }
-
-        .logotype {
-            transition: opacity 0.5s ease, transform 0.5s ease;
-            opacity: 1;
-            height: 3rem;
-        }
-
-        .logotype.hidden {
-            opacity: 0;
-            transform: translateX(20px);
-            width: 0; /* Ensures it doesn't take up space when hidden */
-            margin: 0;
-            pointer-events: none;
-        }
-
-        .mascot-eye {
-            transform-origin: center;
-            transform-box: fill-box; /* Ensures the origin is relative to the path itself */
-            animation: blink-animation 4s infinite;
-        }
-
-        @keyframes blink-animation {
-            0%, 90%, 100% {
-                transform: scaleY(1);
-                opacity: 1;
-            }
-            /* The actual blink happens between 92% and 96% */
-            94% {
-                transform: scaleY(0.05);
-            }
-        }
-
-        /* Tablet Navigation */
-        @media (min-width: 768px) {
-            nav { padding: 25px 5%; }
-            .logotype {
-                height: 50px;
-            }
-            .logomascot{
-                height: 50px;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .logotype {
-                height: 60px;
-            }
-            .logomascot{
-                height: 60px;
-            }
-        }
-
-        /* Hero Section */
-        #hero {
-            height: 100vh; 
-            min-height: 600px;
-            display: flex; 
-            /* Changed from center center to bottom left */
-            align-items: flex-end; 
-            justify-content: flex-start; 
-            background: var(--black); 
-            overflow: hidden; 
-            position: relative;
-            padding: 0 0 10vh 8%;
-        }
-        
-        .hero-bg {
-            position: absolute; 
-            top: 0;
-            left: 0;
-            width: 100%; 
-            height: 100%;
-            /* Ensure image fills everything regardless of container padding */
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), 
-                        url('https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/zoros-dream.png');
-            background-size: cover; 
-            background-position: center;
-        }
-
-        @media (max-width: 500px) {
-            .hero-bg {
-                background-position: 75% center;
-            }
-            nav.scrolled .logomascot {
-                position: absolute;
-                left: 50%;
-                transform: translateX(-50%);
-                transition: none !important;
-                height: 2.5rem; /* Optional: shrink slightly on scroll */
-            }
-            nav.scrolled {
-                justify-content: center; 
-                background-color: rgba(255, 255, 255, 0.8);
-                backdrop-filter: blur(10px);
-            }
-        }
-        
-        .hero-content { 
-            text-align: left; 
-            z-index: 2; 
-            color: var(--white);
-        }
-        
-        .hero-title { 
-            font-size: clamp(3rem, 15vw, 9rem); 
-            font-weight: 900; 
-            text-transform: uppercase; 
-            line-height: 0.8; 
-            letter-spacing: -2px; 
-        }
-        
-        .hero-sub { 
-            font-size: clamp(0.6rem, 2vw, 1rem); 
-            letter-spacing: 5px; 
-            margin-top: 20px; 
-            text-transform: uppercase; 
-            color: var(--red); 
-        }
-
-        @media (min-width: 768px) {
-            .hero-title { letter-spacing: -3px; }
-            .hero-sub { letter-spacing: 8px; }
-        }
-
-        @media (min-width: 1024px) {
-            .hero-title { letter-spacing: -5px; }
-            .hero-sub { letter-spacing: 10px; }
-        }
-
-        /* Section Global Styling */
-        section { 
-            padding: 80px 5%; 
-            position: relative; 
-        }
-
-        @media (min-width: 768px) {
-            section { padding: 50px 8%; }
-        }
-
-        @media (min-width: 1024px) {
-            section { padding: 80px 10%; }
-        }
-        
-        .outline-bg {
-            position: absolute; 
-            font-size: 15vw; 
-            font-weight: 900;
-            color: transparent; 
-            -webkit-text-stroke: 2px rgba(17,17,17,0.1);
-            top: 10px; 
-            left: 5%; 
-            white-space: nowrap; 
-            pointer-events: none; 
-            z-index: -1;
-            display: none;
-        }
-
-        @media (min-width: 768px) {
-            .outline-bg { display: block; font-size: 12vw; }
-        }
-
-        @media (min-width: 1024px) {
-            .outline-bg { font-size: 10vw; }
-        }
-        
-        .reveal { 
-            opacity: 0; 
-            transform: translateY(40px); 
-            transition: all 1s ease; 
-        }
-        
-        .reveal.active { 
-            opacity: 1; 
-            transform: translateY(0); 
-        }
-
-        /* About Section */
-        #about { 
-            display: grid; 
-            grid-template-columns: 1fr; 
-            gap: 30px; 
-            align-items: center; 
-        }
-        
-        .about-text h2 { 
-            font-size: clamp(2rem, 8vw, 3rem); 
-            margin-bottom: 15px; 
-        }
-        
-        .about-text p { 
-            font-size: clamp(0.95rem, 2.5vw, 1.1rem); 
-            color: #444; 
-            max-width: 100%; 
-        }
-
-        .about-image {
-            height: 300px;
-            background: #eee;
-            order: -1;
-        }
-
-        .about-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        @media (min-width: 768px) {
-            #about { 
-                grid-template-columns: 1fr 1fr; 
-                gap: 40px; 
-            }
-            .about-image {
-                height: 350px;
-                order: 0;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            #about { 
-                grid-template-columns: 1.2fr 0.8fr; 
-                gap: 60px; 
-            }
-            .about-image { height: 400px; }
-        }
-
-        /* Showreel */
-        #showreel { 
-            padding: 30px 5% 60px; 
-            color: var(--black); 
-            overflow: hidden; 
-        }
-
-        @media (min-width: 768px) {
-            #showreel { padding: 40px 8%; }
-        }
-
-        @media (min-width: 1024px) {
-            #showreel { padding: 40px 10%; }
-        }
-        
-        .video-container { 
-            width: 100%; 
-            aspect-ratio: 16/9; 
-            background: #222; 
-            position: relative; 
-            border-radius: 20px; 
-            overflow: hidden; 
-            cursor: pointer; 
-        }
-        
-        .video-overlay { 
-            position: absolute; 
-            inset: 0; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            background: rgba(217, 26, 33, 0.1); 
-            transition: 0.3s; 
-        }
-        
-        .video-overlay:hover { 
-            background: rgba(217, 26, 33, 0.3); 
-        }
-
-        .video-overlay i {
-            font-size: 2.5rem;
-        }
-
-        @media (min-width: 768px) {
-            .video-overlay i { font-size: 3.5rem; }
-        }
-
-        @media (min-width: 1024px) {
-            .video-overlay i { font-size: 4rem; }
-        }
-
-        /* Works Grid */
-        .works-grid { 
-            display: grid; 
-            grid-template-columns: 1fr; 
-            gap: 15px; 
-            margin-top: 20px; 
-        }
-
-        @media (min-width: 640px) {
-            .works-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        @media (min-width: 1024px) {
-            .works-grid { grid-template-columns: repeat(3, 1fr); }
-        }
-        
-        .work-card { 
-            height: 250px; 
-            background: var(--light); 
-            position: relative; 
-            overflow: hidden; 
-            border-radius: 4px; 
-        }
-
-        @media (min-width: 768px) {
-            .work-card { height: 280px; }
-        }
-        
-        .work-card img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            transition: 0.5s; 
-        }
-        
-        .work-card:hover img { 
-            transform: scale(1.1); 
-            filter: brightness(0.5); 
-        }
-        
-        .work-info { 
-            position: absolute; 
-            bottom: 20px; 
-            left: 20px; 
-            color: white; 
-            opacity: 0; 
-            transition: 0.3s; 
-        }
-        
-        .work-card:hover .work-info { 
-            opacity: 1; 
-        }
-
-        #works h2 {
-            font-size: clamp(1.8rem, 5vw, 2.5rem);
-            margin-bottom: 20px;
-        }
-
-        @media (min-width: 768px) {
-            #works h2 { margin-bottom: 30px; }
-        }
-
-        /* Services */
-        .services-container { 
-            display: flex; 
-            flex-direction: column; 
-        }
-        
-        .service-row { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            padding: 20px 0; 
-            border-bottom: 1px solid #ddd; 
-            transition: 0.3s; 
-        }
-
-        @media (min-width: 768px) {
-            .service-row { padding: 25px 0; }
-        }
-
-        @media (min-width: 1024px) {
-            .service-row { padding: 30px 0; }
-            .service-row:hover { 
-                padding-left: 20px; 
-                color: var(--red); 
-            }
-        }
-        
-        .service-row h3 { 
-            font-size: clamp(1.2rem, 5vw, 2rem); 
-            text-transform: uppercase; 
-        }
-
-        .service-row span {
-            font-size: clamp(0.9rem, 3vw, 1.2rem);
-            font-weight: 700;
-        }
-
-        /* Team Section */
-        .team-grid { 
-            display: grid; 
-            grid-template-columns: 1fr; 
-            gap: 30px; 
-            margin-top: 30px; 
-        }
-
-        @media (min-width: 640px) {
-            .team-grid { 
-                grid-template-columns: repeat(2, 1fr); 
-                gap: 25px; 
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .team-grid { 
-                grid-template-columns: repeat(4, 1fr); 
-                gap: 20px; 
-            }
-        }
-        
-        .team-card { 
-            text-align: left; 
-        }
-        
-        .team-img { 
-            width: 100%; 
-            aspect-ratio: 1/1; 
-            background: var(--light); 
-            border-radius: 4px; 
-            overflow: hidden; 
-            margin-bottom: 15px; 
-        }
-        
-        .team-img img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            filter: grayscale(100%); 
-            transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1); 
-        }
-        
-        .team-card:hover img { 
-            filter: grayscale(0%); 
-            transform: scale(1.05); 
-        }
-        
-        .team-info h4 { 
-            font-size: clamp(1rem, 2.5vw, 1.1rem); 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
-        }
-        
-        .team-info p { 
-            font-size: 0.75rem; 
-            color: var(--red); 
-            font-weight: 700; 
-            text-transform: uppercase; 
-            margin-top: 5px; 
-        }
-
-        #team h2 {
-            font-size: clamp(1.8rem, 5vw, 2.5rem);
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-
-        @media (min-width: 768px) {
-            #team h2 { margin-bottom: 30px; }
-        }
-
-        /* Contact Section */
-        #contact { 
-            display: grid; 
-            grid-template-columns: 1fr; 
-            gap: 40px;
-            background: var(--white); 
-        }
-
-        @media (min-width: 768px) {
-            #contact { 
-                grid-template-columns: 1fr 1fr; 
-                gap: 50px;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            #contact { gap: 60px; }
-        }
-        
-        .contact-left h2 { 
-            font-size: clamp(2.5rem, 10vw, 4rem); 
-            line-height: 0.9; 
-            margin-bottom: 20px; 
-        }
-
-        .contact-left p {
-            font-size: clamp(0.9rem, 2.5vw, 1rem);
-            margin-top: 20px;
-        }
-        
-        form input, form textarea { 
-            width: 100%; 
-            padding: 15px; 
-            margin-bottom: 10px; 
-            border: 1px solid var(--black); 
-            background: transparent; 
-            font-size: 0.9rem;
-        }
-        
-        .submit-btn { 
-            background: var(--red); 
-            color: white; 
-            border: none; 
-            padding: 18px; 
-            width: 100%; 
-            font-weight: 800; 
-            cursor: pointer; 
-            text-transform: uppercase;
-            font-size: 0.85rem;
-        }
-
-        @media (min-width: 768px) {
-            .submit-btn { padding: 20px; }
-        }
-
-        /* Footer */
-        footer {
-            background: var(--white);
-            color: var(--black);
-            padding: 50px 5% 0 5%;
-            border-top: 1px solid #eee;
-        }
-
-        @media (min-width: 768px) {
-            footer { padding: 60px 8% 0 8%; }
-        }
-
-        @media (min-width: 1024px) {
-            footer { padding: 80px 10% 0 10%; }
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        @media (min-width: 640px) {
-            .footer-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 35px;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .footer-grid {
-                grid-template-columns: 1.5fr 2fr 1.5fr 1fr;
-                gap: 40px;
-                margin-bottom: 60px;
-            }
-        }
-
-        .footer-col h3 {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-            letter-spacing: 1px;
-            font-weight: 800;
-        }
-
-        @media (min-width: 768px) {
-            .footer-col h3 { margin-bottom: 20px; }
-        }
-
-        .footer-col p, .footer-col a {
-            font-size: 0.85rem;
-            color: #666;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 8px;
-            line-height: 1.6;
-        }
-
-        .footer-col a:hover { color: var(--red); }
-
-        .newsletter-row {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 25px;
-            align-items: center;
-            padding: 30px 0;
-            border-top: 1px solid #eee;
-        }
-
-        @media (min-width: 768px) {
-            .newsletter-row {
-                grid-template-columns: 1fr 1fr;
-                gap: 30px;
-                padding: 40px 0;
-            }
-        }
-
-        .newsletter-text { 
-            font-size: 0.85rem; 
-            color: #444; 
-        }
-
-        .newsletter-form { 
-            display: flex; 
-            align-items: stretch; 
-            gap: 0; 
-        }
-        
-        .newsletter-form input {
-            flex-grow: 1;
-            padding: 12px 15px;
-            border: 1px solid var(--black);
-            border-right: none;
-            background: transparent;
-            font-size: 0.75rem;
-            outline: none;
-            height: 45px;
-        }
-
-        @media (min-width: 768px) {
-            .newsletter-form input {
-                padding: 15px;
-                font-size: 0.8rem;
-                height: 50px;
-            }
-        }
-        
-        .newsletter-btn {
-            background: var(--red);
-            color: var(--white);
-            border: 1px solid var(--red);
-            padding: 0 25px;
-            font-size: 0.7rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: 0.3s;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        @media (min-width: 768px) {
-            .newsletter-btn {
-                padding: 0 35px;
-                font-size: 0.75rem;
-                height: 50px;
-            }
-        }
-        
-        .newsletter-btn:hover { 
-            filter: brightness(1.2); 
-        }
-
-        .footer-bottom {
-            /* background: var(--black); */
-            color: #444;
-            padding: 20px 5%;
-            margin: 0 -5%; 
-            text-align: center;
-            font-size: 0.65rem;
-            letter-spacing: 1px;
-        }
-
-        @media (min-width: 768px) {
-            .footer-bottom {
-                padding: 20px 8%;
-                margin: 0 -8%;
-                font-size: 0.7rem;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .footer-bottom {
-                padding: 20px 10%;
-                margin: 0 -10%;
-            }
-        }
-
-    </style>
 </head>
+
 <body>
     <nav class="navbar">
         <svg id="finalizing" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 318.579 188.5304" class="logomascot">
-          <defs>
-            <style>
-              .cls-1 { fill: #d91a21; stroke-width: 0px; }
-              .cls-2 { fill: #fff; stroke-width: 0px; }
-            
-              .mascot-eye {
-                transform-origin: center;
-                transform-box: fill-box;
-                animation: blink-animation 6s infinite ease-in-out;
-              }
-          
-              @keyframes blink-animation {
-                0%, 90%, 100% { 
-                  transform: scale(1); 
-                  opacity: 1;
-                }
-                93% { 
-                  transform: scale(0); 
-                  opacity: 0;
-                } 
-              }
-            </style>
-          </defs>
-      
-          <path class="cls-1" d="M311.2679.0404l-115.52,14.56c-2.07.26-4.16.22-6.2-.19-7.9-1.55-16.13-2.37-24.6-2.37-21.33,0-41.18,5.2-57.84,14.15-2.74,1.47-5.89,1.96-8.93,1.32L8.3379,8.7004C2.9178,7.2304-1.7422,12.7704.6378,17.8604l65.1,114.52h.01c18.62,31.13,54.06,56.15,99.2,56.15,34.76,0,65.63-13.8101,85.05-35.17-9.5,3.4-18.32,5.12-25.48,4.89-.54-.02-1.07-.05-1.6-.09-1.86-2.71-2.91-6.02-3.19-9.78-.61-7.8,2.06-17.5,7.47-27.57,4.55,9.62,9.64,14.76,14.68,13.64,7.29-1.62,10.12-17.9,7.5-38.68,6.56-3.9,13.84-6.39,21.01-7.73-.06-.38-.12-.75-.19-1.13-.25-1.42-.55-2.8199-.89-4.21-.76-3.08-.07-6.34,1.8-8.9l46.32-63.5c3.15-4.65-.58-10.86-6.16-10.26Z"/>
-      
-          <path class="cls-1" d="M190.1278,167.2704c-.46.32-.93.63-1.41.93-10.41,6.54-27,9.63-45.49,8.3-27.09-1.95-45.93-25.51-51.37-43.16-.28-.92-.53-1.82-.74-2.7.97-1.14,2.06-2.27,3.25-3.38,11.15-10.42,31.39-19.24,50.36-14.66-3.2,22.01-.44,39.59,7.15,41.27,6.63,1.48,14.48-7.89,20.5-24.05,8.11,7.89,13.9,16.56,16.47,24.89,1.35,4.33,1.81,8.57,1.28,12.56Z"/>
-          <path class="cls-2 mascot-eye" d="M190.1278,167.2704c-.46.32-.93.63-1.41.93-10.41,6.54-27,9.63-45.49,8.3-27.09-1.95-45.93-25.51-51.37-43.16-.28-.92-.53-1.82-.74-2.7.97-1.14,2.06-2.27,3.25-3.38,11.15-10.42,31.39-19.24,50.36-14.66-3.2,22.01-.44,39.59,7.15,41.27,6.63,1.48,14.48-7.89,20.5-24.05,8.11,7.89,13.9,16.56,16.47,24.89,1.35,4.33,1.81,8.57,1.28,12.56Z"/>
-          
-          <path class="cls-1" d="M271.4178,100.2804c0,17.3-6.01,33.43-16.39,47.05-1.58,2.07-3.25,4.08-5.03,6.03-9.5,3.4-18.32,5.12-25.48,4.89-.54-.02-1.07-.05-1.6-.09-1.86-2.71-2.91-6.02-3.19-9.78-.61-7.8,2.06-17.5,7.47-27.57,4.55,9.62,9.64,14.76,14.68,13.64,7.29-1.62,10.12-17.9,7.5-38.68,6.56-3.9,13.84-6.39,21.01-7.73.68,4,1.03,8.08,1.03,12.2401Z"/>
-          <path class="cls-2 mascot-eye" d="M271.4178,100.2804c0,17.3-6.01,33.43-16.39,47.05-1.58,2.07-3.25,4.08-5.03,6.03-9.5,3.4-18.32,5.12-25.48,4.89-.54-.02-1.07-.05-1.6-.09-1.86-2.71-2.91-6.02-3.19-9.78-.61-7.8,2.06-17.5,7.47-27.57,4.55,9.62,9.64,14.76,14.68,13.64,7.29-1.62,10.12-17.9,7.5-38.68,6.56-3.9,13.84-6.39,21.01-7.73.68,4,1.03,8.08,1.03,12.2401Z"/>
-      
-          <path class="cls-1" d="M214.3078,164.6804l-4,5.22c-.43.56-1.14.83-1.83.69l-6.46-1.29c-.47-.09-.52-.75-.07-.92l11.81-4.44c.45-.17.85.36.55.74Z"/>
-          <path class="cls-2" d="M214.3078,164.6804l-4,5.22c-.43.56-1.14.83-1.83.69l-6.46-1.29c-.47-.09-.52-.75-.07-.92l11.81-4.44c.45-.17.85.36.55.74Z"/>
+            <defs>
+                <style>
+                    .cls-1 {
+                        fill: #d91a21;
+                        stroke-width: 0px;
+                    }
+
+                    .cls-2 {
+                        fill: #fff;
+                        stroke-width: 0px;
+                    }
+
+                    .mascot-eye {
+                        transform-origin: center;
+                        transform-box: fill-box;
+                        animation: blink-animation 6s infinite ease-in-out;
+                    }
+
+                    @keyframes blink-animation {
+
+                        0%,
+                        90%,
+                        100% {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+
+                        93% {
+                            transform: scale(0);
+                            opacity: 0;
+                        }
+                    }
+                </style>
+            </defs>
+
+            <path class="cls-1"
+                d="M311.2679.0404l-115.52,14.56c-2.07.26-4.16.22-6.2-.19-7.9-1.55-16.13-2.37-24.6-2.37-21.33,0-41.18,5.2-57.84,14.15-2.74,1.47-5.89,1.96-8.93,1.32L8.3379,8.7004C2.9178,7.2304-1.7422,12.7704.6378,17.8604l65.1,114.52h.01c18.62,31.13,54.06,56.15,99.2,56.15,34.76,0,65.63-13.8101,85.05-35.17-9.5,3.4-18.32,5.12-25.48,4.89-.54-.02-1.07-.05-1.6-.09-1.86-2.71-2.91-6.02-3.19-9.78-.61-7.8,2.06-17.5,7.47-27.57,4.55,9.62,9.64,14.76,14.68,13.64,7.29-1.62,10.12-17.9,7.5-38.68,6.56-3.9,13.84-6.39,21.01-7.73-.06-.38-.12-.75-.19-1.13-.25-1.42-.55-2.8199-.89-4.21-.76-3.08-.07-6.34,1.8-8.9l46.32-63.5c3.15-4.65-.58-10.86-6.16-10.26Z" />
+
+            <path class="cls-1"
+                d="M190.1278,167.2704c-.46.32-.93.63-1.41.93-10.41,6.54-27,9.63-45.49,8.3-27.09-1.95-45.93-25.51-51.37-43.16-.28-.92-.53-1.82-.74-2.7.97-1.14,2.06-2.27,3.25-3.38,11.15-10.42,31.39-19.24,50.36-14.66-3.2,22.01-.44,39.59,7.15,41.27,6.63,1.48,14.48-7.89,20.5-24.05,8.11,7.89,13.9,16.56,16.47,24.89,1.35,4.33,1.81,8.57,1.28,12.56Z" />
+            <path class="cls-2 mascot-eye"
+                d="M190.1278,167.2704c-.46.32-.93.63-1.41.93-10.41,6.54-27,9.63-45.49,8.3-27.09-1.95-45.93-25.51-51.37-43.16-.28-.92-.53-1.82-.74-2.7.97-1.14,2.06-2.27,3.25-3.38,11.15-10.42,31.39-19.24,50.36-14.66-3.2,22.01-.44,39.59,7.15,41.27,6.63,1.48,14.48-7.89,20.5-24.05,8.11,7.89,13.9,16.56,16.47,24.89,1.35,4.33,1.81,8.57,1.28,12.56Z" />
+
+            <path class="cls-1"
+                d="M271.4178,100.2804c0,17.3-6.01,33.43-16.39,47.05-1.58,2.07-3.25,4.08-5.03,6.03-9.5,3.4-18.32,5.12-25.48,4.89-.54-.02-1.07-.05-1.6-.09-1.86-2.71-2.91-6.02-3.19-9.78-.61-7.8,2.06-17.5,7.47-27.57,4.55,9.62,9.64,14.76,14.68,13.64,7.29-1.62,10.12-17.9,7.5-38.68,6.56-3.9,13.84-6.39,21.01-7.73.68,4,1.03,8.08,1.03,12.2401Z" />
+            <path class="cls-2 mascot-eye"
+                d="M271.4178,100.2804c0,17.3-6.01,33.43-16.39,47.05-1.58,2.07-3.25,4.08-5.03,6.03-9.5,3.4-18.32,5.12-25.48,4.89-.54-.02-1.07-.05-1.6-.09-1.86-2.71-2.91-6.02-3.19-9.78-.61-7.8,2.06-17.5,7.47-27.57,4.55,9.62,9.64,14.76,14.68,13.64,7.29-1.62,10.12-17.9,7.5-38.68,6.56-3.9,13.84-6.39,21.01-7.73.68,4,1.03,8.08,1.03,12.2401Z" />
+
+            <path class="cls-1"
+                d="M214.3078,164.6804l-4,5.22c-.43.56-1.14.83-1.83.69l-6.46-1.29c-.47-.09-.52-.75-.07-.92l11.81-4.44c.45-.17.85.36.55.74Z" />
+            <path class="cls-2"
+                d="M214.3078,164.6804l-4,5.22c-.43.56-1.14.83-1.83.69l-6.46-1.29c-.47-.09-.52-.75-.07-.92l11.81-4.44c.45-.17.85.36.55.74Z" />
         </svg>
-        <img src="/animhaus-logotype.svg" alt="logo-type" class="logotype">
+        <img src="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/animhaus-logotype.svg" alt="logo-type"
+            class="logotype">
     </nav>
 
     <section id="hero">
@@ -787,7 +87,8 @@
         <div class="outline-bg">STUDIO</div>
         <div class="about-text reveal">
             <h2>Crafting Worlds</h2>
-            <p>We are a high-octane creative collective based in Kolkata. We don't just animate; we build legacies through visual engineering and emotional storytelling.</p>
+            <p>We are a high-octane creative collective based in Kolkata. We don't just animate; we build legacies
+                through visual engineering and emotional storytelling.</p>
         </div>
         <div class="about-image reveal">
             <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800" alt="Studio workspace">
@@ -796,9 +97,15 @@
 
     <section id="showreel">
         <div class="video-container reveal">
-            <div class="video-overlay">
+            <video id="showreelVideo" playsinline muted autoplay loop preload="metadata">
+                <source src="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/demo-reel.mp4" type="video/mp4" />
+            </video>
+            <div class="video-overlay" id="videoOverlay">
                 <i class="fas fa-play"></i>
             </div>
+            <button class="sound-toggle" id="soundToggle">
+                <i class="fas fa-volume-mute"></i>
+            </button>
         </div>
     </section>
 
@@ -808,15 +115,27 @@
         <div class="works-grid">
             <div class="work-card reveal">
                 <img src="https://images.unsplash.com/photo-1541562232579-512a21360020?q=80&w=500" alt="Cyberpunk Red">
-                <div class="work-info"><h4>Cyberpunk Red</h4></div>
+                <div class="work-info">
+                    <h4>Cyberpunk Red</h4>
+                </div>
             </div>
             <div class="work-card reveal">
                 <img src="https://images.unsplash.com/photo-1634157703702-3c124b455499?q=80&w=500" alt="Glass Dreams">
-                <div class="work-info"><h4>Glass Dreams</h4></div>
+                <div class="work-info">
+                    <h4>Glass Dreams</h4>
+                </div>
             </div>
             <div class="work-card reveal">
-                <img src="https://images.unsplash.com/photo-1578632289114-281cbd646256?q=80&w=500" alt="Spirit Walk">
-                <div class="work-info"><h4>Spirit Walk</h4></div>
+                <a href="artwork.html?project=race-against-time">
+                    <img src="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/race_against_time/race_against_time.avif"
+                        srcset="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/race_against_time/race_against_time.avif 1x,
+                                https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/race_against_time/race_against_time.webp 2x,
+                                https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/race_against_time/race_against_time.png 3x"
+                        alt="Race Against Time" loading="lazy">
+                    <div class="work-info">
+                        <h4>Race Against Time</h4>
+                    </div>
+                </a>
             </div>
         </div>
     </section>
@@ -865,7 +184,8 @@
             </div>
             <div class="team-card reveal">
                 <div class="team-img">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400" alt="Elena Rossi">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400"
+                        alt="Elena Rossi">
                 </div>
                 <div class="team-info">
                     <h4>Elena Rossi</h4>
@@ -874,7 +194,8 @@
             </div>
             <div class="team-card reveal">
                 <div class="team-img">
-                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400" alt="Marcus Vane">
+                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400"
+                        alt="Marcus Vane">
                 </div>
                 <div class="team-info">
                     <h4>Marcus Vane</h4>
@@ -896,20 +217,21 @@
     <section id="contact" style="padding-top: 120px; padding-bottom: 120px">
         <div class="contact-left reveal">
             <h2>GET IN<br>THE HOUSE</h2>
-            <p>appleboy285@gmail.com</p>
+            <p style="color: #bbb;">appleboy285@gmail.com</p>
         </div>
         <form id="contactForm" class="reveal">
-          <input type="text" name="name" placeholder="FULL NAME" required>
-          <input type="email" name="email" placeholder="EMAIL ADDRESS" required>
-          <textarea name="message" rows="4" placeholder="TELL US THE VISION" required></textarea>
-          <button type="submit" class="submit-btn">Start Project</button>
+            <input type="text" name="name" placeholder="FULL NAME" required>
+            <input type="email" name="email" placeholder="EMAIL ADDRESS" required>
+            <textarea name="message" rows="4" placeholder="TELL US THE VISION" required></textarea>
+            <button type="submit" class="submit-btn">Start Project</button>
         </form>
     </section>
 
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
-                <img src="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/animhaus-logo-mascot.png" alt="logo-type" class="logomascot">
+                <img src="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/animhaus-logo-mascot.png" alt="logo-type"
+                    class="logomascot">
             </div>
             <div class="footer-col">
                 <h3>Contact</h3>
@@ -937,15 +259,16 @@
         </div>
     </footer>
 
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
     <script>
         // Logotype hide on scroll
         let lastScrollTop = 0;
         const navbar = document.querySelector('nav');
         const logotype = document.querySelector('.logotype');
-        
+
         window.addEventListener('scroll', () => {
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
+
             if (scrollTop > 100) {
                 navbar.classList.add('scrolled');
                 logotype.classList.add('hidden');
@@ -953,15 +276,15 @@
                 navbar.classList.remove('scrolled');
                 logotype.classList.remove('hidden');
             }
-            
+
             lastScrollTop = scrollTop;
         });
 
         // Smooth Scroll
         const lenis = new Lenis();
-        function raf(time) { 
-            lenis.raf(time); 
-            requestAnimationFrame(raf); 
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
         }
         requestAnimationFrame(raf);
 
@@ -969,10 +292,10 @@
         const cursor = document.getElementById('cursor');
         if (window.innerWidth >= 1024) {
             window.addEventListener('mousemove', (e) => {
-                gsap.to(cursor, { 
-                    x: e.clientX, 
-                    y: e.clientY, 
-                    duration: 0.3 
+                gsap.to(cursor, {
+                    x: e.clientX,
+                    y: e.clientY,
+                    duration: 0.3
                 });
             });
         }
@@ -982,11 +305,11 @@
 
         // Hero parallax
         gsap.to(".hero-bg", {
-            scrollTrigger: { 
-                trigger: "#hero", 
-                start: "top top", 
-                end: "bottom top", 
-                scrub: true 
+            scrollTrigger: {
+                trigger: "#hero",
+                start: "top top",
+                end: "bottom top",
+                scrub: true
             },
             scale: 1.5,
             y: 100
@@ -994,11 +317,11 @@
 
         // Hero title animation
         gsap.from(".hero-title", {
-            y: 100, 
-            opacity: 0, 
-            duration: 1.5, 
-            stagger: 0.2, 
-            ease: "power4.out", 
+            y: 100,
+            opacity: 0,
+            duration: 1.5,
+            stagger: 0.2,
+            ease: "power4.out",
             delay: 0.5
         });
 
@@ -1034,46 +357,95 @@
         // Showreel width transform on scroll
         const reel = document.querySelector(".video-container");
 
-        gsap.fromTo(
-            reel,
-            {
-                scaleX: 0.85,
-                transformOrigin: "center center"
-            },
-            {
-                scaleX: 1,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: reel,
-                
-                    // 👇 percent-based visibility
-                    start: "top 100%",   // ~5% visible
-                    end: "top 75%",     // ~25% visible
-                
-                    scrub: true,
-                    markers: false
+        ScrollTrigger.create({
+            trigger: reel,
+            start: "top 85%",
+            end: "top 20%",
+            scrub: true,
+
+            onUpdate: self => {
+                if (self.progress > 0.4) {
+                    reel.classList.add("expanded");
+                } else {
+                    reel.classList.remove("expanded");
                 }
             }
-        );
+        });
 
         document.getElementById("contactForm").addEventListener("submit", async e => {
-          e.preventDefault();
+            e.preventDefault();
 
-          const formData = new FormData(e.target);
+            const formData = new FormData(e.target);
 
-          await fetch("https://formsubmit.co/ajax/appleboy285@gmail.com", {
-            method: "POST",
-            body: formData
-          });
+            await fetch("https://formsubmit.co/ajax/appleboy285@gmail.com", {
+                method: "POST",
+                body: formData
+            });
 
-          alert("Message sent successfully!");
+            alert("Message sent successfully!");
+        });
+
+        // VIDEO CONTROLS - FIXED VERSION
+        const video = document.getElementById("showreelVideo");
+        const overlay = document.getElementById("videoOverlay");
+        const soundBtn = document.getElementById("soundToggle");
+        const soundIcon = soundBtn.querySelector("i");
+        const videoContainer = document.querySelector(".video-container");
+
+        // autoplay muted (required by browser)
+        video.muted = true;
+        video.play().catch(() => { });
+
+        // click play overlay
+        overlay.addEventListener("click", () => {
+            video.muted = false;
+            video.play();
+
+            overlay.classList.add("hidden");
+            soundBtn.classList.add("show");
+
+            soundIcon.className = "fas fa-volume-up";
+        });
+
+        // mute / unmute
+        soundBtn.addEventListener("click", () => {
+            video.muted = !video.muted;
+
+            soundIcon.className = video.muted
+                ? "fas fa-volume-mute"
+                : "fas fa-volume-up";
+        });
+
+        // Retract video when scrolled away
+        ScrollTrigger.create({
+            trigger: videoContainer,
+            start: "bottom top",
+            onLeave: () => {
+                videoContainer.classList.remove("expanded");
+            },
+            onEnterBack: () => {
+                if (!overlay.classList.contains("hidden")) {
+                    videoContainer.classList.add("expanded");
+                }
+            }
+        });
+
+        ScrollTrigger.create({
+            trigger: videoContainer,
+            start: "top bottom",     // enters viewport
+            end: "bottom top",       // leaves viewport
+
+            onLeave: () => {
+                video.muted = true;
+                soundIcon.className = "fas fa-volume-mute";
+            },
+
+            onLeaveBack: () => {
+                video.muted = true;
+                soundIcon.className = "fas fa-volume-mute";
+            }
         });
     </script>
 </body>
 
 </html>
-
-
-
-
-
