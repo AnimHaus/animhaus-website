@@ -40,12 +40,13 @@
                         0%,
                         90%,
                         100% {
-                            transform: scale(1);
+                            transform: scaleY(1);
                             opacity: 1;
                         }
 
-                        93% {
-                            transform: scale(0);
+                        93%,
+                        96% {
+                            transform: scaleY(0);
                             opacity: 0;
                         }
                     }
@@ -219,12 +220,38 @@
             <h2>GET IN<br>THE HOUSE</h2>
             <p style="color: #bbb;">appleboy285@gmail.com</p>
         </div>
-        <form id="contactForm" class="reveal">
+        <form id="contactForm" class="reveal" enctype="multipart/form-data">
             <input type="text" name="name" placeholder="FULL NAME" required>
-            <input type="email" name="email" placeholder="EMAIL ADDRESS" required>
-            <textarea name="message" rows="4" placeholder="TELL US THE VISION" required></textarea>
-            <button type="submit" class="submit-btn">Start Project</button>
+            <input type="tel" name="whatsapp" placeholder="WHATSAPP NO." required>
+            <textarea type="text" name="source" placeholder="HOW DID YOU HEAR ABOUT US?" required></textarea>
+            <div class="file-upload-container">
+                <label for="portfolio" class="upload-box">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span class="upload-text">PORTFOLIO UPLOAD</span>
+                    <span class="file-info">PDF, ZIP, DOC (MAX 10MB)</span>
+                    <span id="fileNameDisplay" class="file-name-display"></span>
+                </label>
+                <input type="file" id="portfolio" name="portfolio" accept=".pdf,.doc,.docx,.zip" required
+                    style="display: none;">
+            </div>
+            <button type="submit" class="submit-btn" style="margin-top: 10px;">Apply</button>
         </form>
+
+        <script>
+            const fileInput = document.getElementById('portfolio');
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+            const uploadBox = document.querySelector('.upload-box');
+
+            fileInput.addEventListener('change', (e) => {
+                if (fileInput.files.length > 0) {
+                    fileNameDisplay.textContent = fileInput.files[0].name;
+                    uploadBox.classList.add('has-file');
+                } else {
+                    fileNameDisplay.textContent = '';
+                    uploadBox.classList.remove('has-file');
+                }
+            });
+        </script>
     </section>
 
     <footer>
