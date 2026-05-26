@@ -215,44 +215,33 @@
         <div class="outline-bg">CREATIVES</div>
         <h2>The Team</h2>
         <div class="team-grid">
-            <div class="team-card reveal">
+            <div class="team-card reveal" id="ab-card">
                 <div class="team-img">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400" alt="Kenji Sato">
+                    <img class="img-bw" src="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/team_assets/ab_bw.png" alt="A bot">
+                    <img class="img-color" src="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/team_assets/ab.png" alt="A bot color">
+                    <div class="team-img-overlay">
+                        <p>Jack of all trades, master of none,<br>I do everything, just for fun.</p>
+                    </div>
                 </div>
                 <div class="team-info">
-                    <h4>Kenji Sato</h4>
-                    <p>Director</p>
+                    <h4>A bot</h4>
+                    <p class="team-role" data-default="AppleBoyCussDem" data-hover="Abiskar Das">AppleBoyCussDem</p>
                 </div>
             </div>
-            <div class="team-card reveal">
+            <div class="team-card reveal" id="draunz-card">
                 <div class="team-img">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400"
-                        alt="Elena Rossi">
+                    <img class="img-bw" src="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/team_assets/draunz_bw.png" alt="tech mech">
+                    <img class="img-color" src="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/team_assets/draunz.png" alt="tech mech color">
+                    <div class="team-img-overlay">
+                        <p>Build fast, break limits, learn it all,<br>From code to chaos — I handle the call.</p>
+                    </div>
                 </div>
                 <div class="team-info">
-                    <h4>Elena Rossi</h4>
-                    <p>Lead Animator</p>
+                    <h4>tech mech</h4>
+                    <p class="team-role" data-default="DRAUNZLER" data-hover="Arijit Saha">DRAUNZLER</p>
                 </div>
             </div>
-            <div class="team-card reveal">
-                <div class="team-img">
-                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400"
-                        alt="Marcus Vane">
-                </div>
-                <div class="team-info">
-                    <h4>Marcus Vane</h4>
-                    <p>Technical TD</p>
-                </div>
-            </div>
-            <div class="team-card reveal">
-                <div class="team-img">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400" alt="Sarah J.">
-                </div>
-                <div class="team-info">
-                    <h4>Sarah J.</h4>
-                    <p>Concept Artist</p>
-                </div>
-            </div>
+
         </div>
     </section>
 
@@ -329,6 +318,14 @@
 
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
     <script>
+        // Role text hover swap for special cards
+        ['ab-card', 'draunz-card'].forEach(id => {
+            const card = document.getElementById(id);
+            const role = card.querySelector('.team-role');
+            card.addEventListener('mouseenter', () => { role.textContent = role.dataset.hover; });
+            card.addEventListener('mouseleave', () => { role.textContent = role.dataset.default; });
+        });
+
         // Logotype hide on scroll
         let lastScrollTop = 0;
         const navbar = document.querySelector('nav');
