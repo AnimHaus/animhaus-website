@@ -1,5 +1,8 @@
 /* Artwork Page Styles - Following main style.css design system */
 
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
+
 /* Import design tokens from main style */
 :root {
     --white: #ffffff;
@@ -21,7 +24,11 @@ html.lenis {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Geist', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 body {
@@ -29,6 +36,7 @@ body {
     color: var(--black);
     line-height: 1.4;
     overflow-x: hidden;
+    font-family: 'Geist', sans-serif;
 }
 
 /* Navigation - Consistent with main site */
