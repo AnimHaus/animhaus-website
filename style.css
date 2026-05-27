@@ -525,6 +525,9 @@ section {
     padding: 20px 0;
     border-bottom: 1px solid #ddd;
     transition: 0.3s;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
 }
 
 @media (min-width: 768px) {
