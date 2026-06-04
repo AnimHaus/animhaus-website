@@ -1,16 +1,46 @@
 {
-  "race-against-time": {
-    "title": "Race Against Time",
-    "tagline": "A visual metaphor of modern life running faster than the clock.",
+  "shurer-dhara": {
+    "title": "Shurer Dhara",
+    "tagline": "A global digital home for Rabindrasangeet, culture, and community impact.",
     "year": "2026",
-    "category": "Editorial Illustration",
-    "theme": "Time · Anxiety · Modern Work Culture",
-    "description": "This artwork represents the constant pressure of deadlines in modern society. The character is shown physically running away from time itself, symbolizing burnout, urgency, and chaos.",
-    "cover": "https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/race_against_time/race_against_time.webp",
+    "category": "Web Systems · Cultural Institution",
+    "theme": "Music Education · Cultural Heritage · Global Community",
+    "description": "For Shurer Dhara, we built a multilingual, trust-first web platform that presents the institution's artistic legacy, global school network, and social impact mission with clarity. The experience unifies cultural storytelling, program discovery, and audience engagement across regions.",
+    "cover": "https://shurer-dhara.vercel.app/MFD.webp",
     "credits": {
-      "Illustration": "AnimHaus Studio",
-      "Concept": "Abiskar Das",
-      "Tools": "Illustrator · Photoshop"
+      "Client": "Shurer Dhara",
+      "Delivery": "AnimHaus Studios",
+      "Scope": "UX Direction · Content Architecture · Multisection Frontend Build",
+      "Outcome": "Unified digital identity connecting professor profile, schools, and Music for Development initiative"
+    }
+  },
+  "westra": {
+    "title": "Westra Wear",
+    "year": "2026",
+    "category": "Web Systems · Ecommerce",
+    "theme": "D2C Retail · Live Selling · Social Commerce",
+    "description": "For Westra Wear, we designed and delivered a complete web experience that merges premium fashion storytelling with practical online buying. The build balances editorial visual language, category-led discovery, and high-intent purchase flows while supporting a social-first live sales model across Facebook, Instagram, and WhatsApp.",
+    "cover": "https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/westra/westra.webp",
+    "credits": {
+      "Client": "Westra Wear",
+      "Delivery": "AnimHaus Studios",
+      "Scope": "UX Direction · Frontend Build · Commerce IA · Conversion Copy",
+      "Outcome": "Unified online shop + live sales funnel for faster product discovery and assisted checkout"
+    }
+  },
+  "kdiae": {
+    "title": "KD Institute of Advance Education",
+    "tagline": "A trust-first admissions platform for a growing education institution.",
+    "year": "2026",
+    "category": "Web Systems · Education",
+    "theme": "School Admissions · Parent Trust · Institutional Growth",
+    "description": "For KD Institute of Advance Education, we delivered a modern school website designed to strengthen parent trust, simplify admissions, and present academics with clarity. We continue to support the institution with ongoing services, including a custom ERP roadmap and expansion planning for future training centers and ITI colleges.",
+    "cover": "https://cdn.kdiae.in/front_building.jpg",
+    "credits": {
+      "Client": "KD Institute of Advance Education",
+      "Delivery": "AnimHaus Studios",
+      "Scope": "UX Strategy · Frontend Development · Admissions Funnel · Content Architecture",
+      "Ongoing": "Continuous support including custom ERP implementation planning and multi-center expansion consulting"
     }
   }
 }

@@ -1,10 +1,32 @@
 const params = new URLSearchParams(window.location.search);
-const projectId = params.get("project");
+const projectIdFromUrl = params.get("project");
+const projectIdFromPage = window.__ARTWORK_PROJECT_ID__;
+
+// Match homepage header behavior on artwork routes.
+const artworkNav = document.querySelector('nav');
+const artworkLogotype = document.querySelector('.logotype');
+
+window.addEventListener('scroll', () => {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  if (!artworkNav || !artworkLogotype) return;
+
+  if (scrollTop > 100) {
+    artworkNav.classList.add('scrolled');
+    artworkLogotype.classList.add('hidden');
+  } else {
+    artworkNav.classList.remove('scrolled');
+    artworkLogotype.classList.remove('hidden');
+  }
+});
 
 fetch("/data/artworks.json")
   .then(res => res.json())
   .then(data => {
 
+    const fallbackProjectId = Object.keys(data)[0];
+    const projectId = (projectIdFromPage && data[projectIdFromPage])
+      ? projectIdFromPage
+      : (projectIdFromUrl && data[projectIdFromUrl] ? projectIdFromUrl : fallbackProjectId);
     const project = data[projectId];
     if (!project) return;
 
@@ -25,13 +47,10 @@ fetch("/data/artworks.json")
     updateMeta('og:url', window.location.href, true);
 
     // Dynamic Structured Data
-    const script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.text = JSON.stringify({
+    const structuredData = {
       "@context": "https://schema.org",
       "@type": "VisualArtwork",
       "name": project.title,
-      "abstract": project.tagline,
       "description": project.description,
       "image": project.cover,
       "creator": {
@@ -40,11 +59,26 @@ fetch("/data/artworks.json")
       },
       "dateCreated": project.year,
       "genre": project.category
-    });
+    };
+
+    if (project.tagline) {
+      structuredData.abstract = project.tagline;
+    }
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify(structuredData);
     document.head.appendChild(script);
 
     document.getElementById("title").innerText = project.title;
-    document.getElementById("tagline").innerText = project.tagline;
+    const taglineEl = document.getElementById("tagline");
+    if (project.tagline) {
+      taglineEl.innerText = project.tagline;
+      taglineEl.style.display = "";
+    } else {
+      taglineEl.innerText = "";
+      taglineEl.style.display = "none";
+    }
     document.getElementById("description").innerText = project.description;
 
     document.getElementById("year").innerText = project.year;

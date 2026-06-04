@@ -49,6 +49,12 @@ nav {
     width: 100%;
     top: 0;
     z-index: 1000;
+    transition: background-color 0.4s ease, backdrop-filter 0.4s ease, padding 0.4s ease;
+}
+
+nav.scrolled {
+    padding: 10px 5%;
+    justify-content: flex-start;
 }
 
 .logomascot {
@@ -61,6 +67,14 @@ nav {
     transition: opacity 0.5s ease, transform 0.5s ease;
     opacity: 1;
     height: 3rem;
+}
+
+.logotype.hidden {
+    opacity: 0;
+    transform: translateX(20px);
+    width: 0;
+    margin: 0;
+    pointer-events: none;
 }
 
 .mascot-eye {
@@ -236,6 +250,99 @@ nav {
     color: #666;
 }
 
+.case-study {
+    padding: 20px 5% 60px;
+}
+
+.case-intro h2 {
+    font-size: clamp(2rem, 6vw, 2.5rem);
+    text-transform: uppercase;
+    font-weight: 900;
+}
+
+.case-intro {
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.case-study-flow {
+    border-top: 1px solid #e8e8e8;
+}
+
+.case-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 26px 0;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.case-row h2,
+.case-row h3 {
+    font-size: clamp(1.1rem, 3vw, 1.6rem);
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+}
+
+.case-content p,
+.case-content li {
+    font-size: clamp(0.9rem, 2vw, 1rem);
+    color: #333;
+    line-height: 1.7;
+}
+
+.case-content h4 {
+    font-size: clamp(0.95rem, 1.8vw, 1.08rem);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 16px;
+    color: #111;
+}
+
+.case-content p + p {
+    margin-top: 12px;
+}
+
+.case-content ul {
+    padding-left: 18px;
+}
+
+.case-content ol {
+    padding-left: 18px;
+}
+
+.case-content li + li {
+    margin-top: 8px;
+}
+
+.case-content > * + * {
+    margin-top: 12px;
+}
+
+.case-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.case-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--black);
+    padding: 10px 14px;
+    color: var(--black);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    transition: all 0.25s ease;
+}
+
+.case-links a:hover {
+    background: var(--black);
+    color: var(--white);
+}
+
 @media (min-width: 768px) {
     .info {
         grid-template-columns: 1.5fr 1fr;
@@ -246,6 +353,24 @@ nav {
     .info .right li {
         padding: 15px 0;
     }
+
+    .case-study {
+        padding: 20px 8% 80px;
+    }
+
+    .case-row {
+        grid-template-columns: minmax(180px, 0.55fr) minmax(0, 1.45fr);
+        gap: 28px;
+        padding: 34px 0;
+    }
+
+    .case-row h2,
+    .case-row h3 {
+        font-size: clamp(1.2rem, 2.1vw, 1.6rem);
+        position: sticky;
+        top: 110px;
+        align-self: start;
+    }
 }
 
 @media (min-width: 1024px) {
@@ -253,6 +378,21 @@ nav {
         grid-template-columns: 2fr 1fr;
         gap: 80px;
         padding: 100px 10%;
+    }
+
+    .case-study {
+        padding: 20px 10% 100px;
+    }
+
+    .case-row {
+        grid-template-columns: minmax(220px, 0.5fr) minmax(0, 1.5fr);
+        gap: 44px;
+        padding: 40px 0;
+    }
+
+    .case-content p,
+    .case-content li {
+        font-size: 1.02rem;
     }
 }
 
@@ -357,7 +497,6 @@ nav {
 /* Credits Section */
 .credits {
     padding: 60px 5%;
-    border-top: 1px solid #ddd;
 }
 
 .credits::before {

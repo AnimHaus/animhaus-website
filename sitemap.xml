@@ -7,8 +7,20 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://animhaus.com/artwork.html?project=race-against-time</loc>
-    <lastmod>2026-02-04</lastmod>
+    <loc>https://animhaus.com/artwork/shurer-dhara</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://animhaus.com/artwork/westra</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://animhaus.com/artwork/kdiae</loc>
+    <lastmod>2026-06-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
