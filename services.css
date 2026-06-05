@@ -17,6 +17,11 @@
 @media (max-width: 500px) {
     .services-page nav.scrolled {
         background-color: rgba(255, 255, 255, 0.95);
+        justify-content: center;
+        align-items: center;
+    }
+    nav.scrolled svg{
+        margin-top: -1.25rem;
     }
 }
 
@@ -1217,6 +1222,32 @@
     50% { transform: translateX(6px); }
 }
 
+/* ── Hero sphere canvas ── */
+#hero-sphere {
+    position: absolute;
+    bottom: -52%;
+    right: -25%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.92;
+    image-rendering: auto;
+}
+
+@media (min-width: 1400px) {
+    #hero-sphere {
+        bottom: -70%;
+    }
+}
+
+@media (max-width: 767px) {
+    #hero-sphere {
+        bottom: auto;
+        top: 30vh;
+        right: -50%;
+        opacity: 0.45;
+    }
+}
+
 /* ── Pin container ── */
 .sr-offer-pin {
     position: relative;
@@ -1407,16 +1438,11 @@
     transition: width 0.08s linear;
 }
 
-/* ── Mobile: vertical stack ── */
+/* ── Mobile: GSAP-driven horizontal slide (mirrors desktop) ── */
 @media (max-width: 767px) {
-    .sr-offer-slides {
-        flex-direction: column;
-    }
-
     .sr-offer-slide {
-        width: 100%;
-        min-height: auto;
-        padding: 72px 5% 80px;
+        min-height: 100svh;
+        padding: 72px 5% 100px;
     }
 
     .sr-slide-bg-num {
@@ -1428,12 +1454,10 @@
     }
 
     .sr-offer-ui {
-        position: relative;
-        bottom: auto;
-        left: auto;
-        right: auto;
-        margin-top: 16px;
-        padding: 0 5% 28px;
+        position: absolute;
+        bottom: 28px;
+        left: 5%;
+        right: 5%;
     }
 }
 
