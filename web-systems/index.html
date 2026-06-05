@@ -543,43 +543,66 @@
 
         if (offerSlides && offerPin) {
 
-            const getTrackDistance = () => offerSlides.scrollWidth - window.innerWidth;
-            const getTotalScroll = () => getTrackDistance() / slideScrollAccelerator;
+            if (window.innerWidth < 768) {
+                // ── Mobile: native CSS scroll-snap (no GSAP hijack) ──
+                offerPin.style.overflow = 'hidden';
+                offerSlides.style.display          = 'flex';
+                offerSlides.style.overflowX        = 'auto';
+                offerSlides.style.scrollSnapType   = 'x mandatory';
+                offerSlides.style.webkitOverflowScrolling = 'touch';
+                offerSlides.style.scrollbarWidth   = 'none';
+                offerSlides.style.msOverflowStyle  = 'none';
+                slideEls.forEach(slide => {
+                    slide.style.scrollSnapAlign = 'start';
+                    slide.style.flexShrink      = '0';
+                    slide.style.width           = '100vw';
+                });
+                offerSlides.addEventListener('scroll', () => {
+                    const idx = Math.round(offerSlides.scrollLeft / offerSlides.offsetWidth);
+                    if (counterEl) counterEl.textContent = String(idx + 1);
+                    if (progressBar) progressBar.style.width = ((idx / (numSlides - 1)) * 100) + '%';
+                }, { passive: true });
 
-            gsap.to(offerSlides, {
-                x: () => -getTrackDistance(),
-                ease: 'none',
-                scrollTrigger: {
-                    trigger: offerPin,
-                    pin: true,
-                    scrub: 1,
-                    invalidateOnRefresh: true,
-                    end: () => '+=' + getTotalScroll(),
-                    onUpdate(self) {
-                        if (progressBar) progressBar.style.width = (self.progress * 100) + '%';
-                        if (counterEl)   counterEl.textContent = String(Math.round(self.progress * (numSlides - 1)) + 1);
-                    }
-                }
-            });
-        
-            // Parallax bg numbers
-            slideEls.forEach(slide => {
-                const num = slide.querySelector('.sr-slide-bg-num');
-                if (!num) return;
-                gsap.fromTo(num,
-                    { xPercent: 8 },
-                    {
-                        xPercent: -8, ease: 'none',
-                        scrollTrigger: {
-                            trigger: offerPin, scrub: 2,
-                            start: 'top top',
-                            end: () => '+=' + getTotalScroll(),
-                            invalidateOnRefresh: true,
+            } else {
+                // ── Desktop: GSAP pinned horizontal scroll ──
+                const getTrackDistance = () => offerSlides.scrollWidth - window.innerWidth;
+                const getTotalScroll   = () => getTrackDistance() / slideScrollAccelerator;
+
+                gsap.to(offerSlides, {
+                    x: () => -getTrackDistance(),
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: offerPin,
+                        pin: true,
+                        scrub: 1,
+                        invalidateOnRefresh: true,
+                        end: () => '+=' + getTotalScroll(),
+                        onUpdate(self) {
+                            if (progressBar) progressBar.style.width = (self.progress * 100) + '%';
+                            if (counterEl)   counterEl.textContent = String(Math.round(self.progress * (numSlides - 1)) + 1);
                         }
                     }
-                );
-            });
-        
+                });
+
+                // Parallax bg numbers
+                slideEls.forEach(slide => {
+                    const num = slide.querySelector('.sr-slide-bg-num');
+                    if (!num) return;
+                    gsap.fromTo(num,
+                        { xPercent: 8 },
+                        {
+                            xPercent: -8, ease: 'none',
+                            scrollTrigger: {
+                                trigger: offerPin, scrub: 2,
+                                start: 'top top',
+                                end: () => '+=' + getTotalScroll(),
+                                invalidateOnRefresh: true,
+                            }
+                        }
+                    );
+                });
+            }
+
         }
         // ── 3D Wireframe Earth ─────────────────────────
         (function () {
