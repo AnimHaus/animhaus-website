@@ -1223,28 +1223,77 @@
 }
 
 /* ── Hero sphere canvas ── */
-#hero-sphere {
+#hero-sphere,
+#hero-sphere-popups {
     position: absolute;
     bottom: -52%;
     right: -25%;
     pointer-events: none;
     z-index: 0;
+}
+
+#hero-sphere {
     opacity: 0.92;
     image-rendering: auto;
 }
 
+#hero-sphere-popups {
+    overflow: visible;
+}
+
+.sr-sphere-popup {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(255, 247, 247, 0.92);
+    border: 1px solid rgba(217, 26, 33, 0.12);
+    box-shadow: 0 16px 40px rgba(217, 26, 33, 0.08);
+    color: #ef8d91;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    transform: translate(-50%, -50%);
+    transform-origin: center;
+    will-change: transform, opacity;
+}
+
+.sr-sphere-popup i {
+    font-size: 0.78rem;
+}
+
+.sr-sphere-popup span {
+    color: rgba(217, 26, 33, 0.52);
+}
+
 @media (min-width: 1400px) {
-    #hero-sphere {
+    #hero-sphere,
+    #hero-sphere-popups {
         bottom: -70%;
     }
 }
 
 @media (max-width: 767px) {
-    #hero-sphere {
+    #hero-sphere,
+    #hero-sphere-popups {
         bottom: auto;
         top: 30vh;
         right: -50%;
+    }
+
+    #hero-sphere {
         opacity: 0.45;
+    }
+
+    .sr-sphere-popup {
+        padding: 6px 10px;
+        gap: 6px;
+        font-size: 0.64rem;
     }
 }
 

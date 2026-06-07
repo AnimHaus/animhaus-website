@@ -6,6 +6,12 @@
     --black: #111111;
     --red: #D91A21;
     --light: #f9f9f9;
+    --service-red-1: #d91a21;
+    --service-red-2: #df373d;
+    --service-red-3: #e65258;
+    --service-red-4: #ed6d72;
+    --service-red-5: #f48c90;
+    --service-red-6: #f8acae;
 }
 
 * {
@@ -538,48 +544,169 @@ section {
 }
 
 /* Services */
+#services {
+    position: relative;
+}
+
+#services h2 {
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
+    margin-bottom: 20px;
+}
+
 .services-container {
     display: flex;
     flex-direction: column;
+    gap: 0;
+    padding-bottom: 24px;
 }
 
 .service-row {
+    position: sticky;
+    --service-title-color: #fff7f7;
+    --service-body-color: rgba(255, 244, 244, 0.9);
+    --service-index-color: rgba(255, 238, 238, 0.95);
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 20px 0;
-    border-bottom: 1px solid #ddd;
-    transition: 0.3s;
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 28px 22px;
+    min-height: 72vh;
+    top: 76px;
+    margin-bottom: 12px;
+    border: none;
+    border-radius: 24px;
+    color: var(--service-title-color);
+    transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease;
     text-decoration: none;
-    color: inherit;
     cursor: pointer;
 }
 
+.service-row:nth-child(1) {
+    top: 76px;
+    z-index: 1;
+    background: var(--service-red-1);
+}
+
+.service-row:nth-child(2) {
+    top: 86px;
+    z-index: 2;
+    background: var(--service-red-2);
+}
+
+.service-row:nth-child(3) {
+    top: 96px;
+    z-index: 3;
+    background: var(--service-red-3);
+}
+
+.service-row:nth-child(4) {
+    top: 106px;
+    z-index: 4;
+    background: var(--service-red-4);
+    --service-body-color: rgba(72, 19, 21, 0.88);
+    --service-index-color: rgba(72, 19, 21, 0.94);
+}
+
+.service-row:nth-child(5) {
+    top: 116px;
+    z-index: 5;
+    background: var(--service-red-5);
+    --service-title-color: #511416;
+    --service-body-color: rgba(81, 20, 22, 0.88);
+    --service-index-color: rgba(81, 20, 22, 0.94);
+}
+
+.service-row:nth-child(6) {
+    top: 126px;
+    z-index: 6;
+    background: var(--service-red-6);
+    --service-title-color: #3d0f11;
+    --service-body-color: rgba(61, 15, 17, 0.88);
+    --service-index-color: rgba(61, 15, 17, 0.94);
+}
+
+.service-content {
+    max-width: 760px;
+}
+
 @media (min-width: 768px) {
+    .services-container { padding-bottom: 30px; }
+
     .service-row {
-        padding: 25px 0;
+        justify-content: space-between;
+        padding: 36px 30px;
+        min-height: 65vh;
+        top: 0;
+        margin-bottom: 14px;
+    }
+
+    .service-row:nth-child(1) {
+        top: 0;
+        z-index: 1;
+        background: var(--service-red-1);
+    }
+
+    .service-row:nth-child(2) {
+        top: 16px;
+        z-index: 2;
+        background: var(--service-red-2);
+    }
+
+    .service-row:nth-child(3) {
+        top: 32px;
+        z-index: 3;
+        background: var(--service-red-3);
+    }
+
+    .service-row:nth-child(4) {
+        top: 48px;
+        z-index: 4;
+        background: var(--service-red-4);
+    }
+
+    .service-row:nth-child(5) {
+        top: 64px;
+        z-index: 5;
+        background: var(--service-red-5);
+    }
+
+    .service-row:nth-child(6) {
+        top: 80px;
+        z-index: 6;
+        background: var(--service-red-6);
+        color: #3d0f11;
     }
 }
 
 @media (min-width: 1024px) {
     .service-row {
-        padding: 30px 0;
+        padding: 40px 34px;
+        min-height: 80vh;
     }
 
     .service-row:hover {
-        padding-left: 20px;
-        color: var(--red);
+        filter: brightness(0.96);
     }
 }
 
 .service-row h3 {
-    font-size: clamp(1.2rem, 5vw, 2rem);
+    font-size: clamp(3rem, 5vw, 5rem);
     text-transform: uppercase;
 }
 
+.service-row p {
+    margin-top: 14px;
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+    line-height: 1.45;
+    max-width: 42ch;
+    color: var(--service-body-color);
+}
+
 .service-row span {
+    align-self: flex-end;
     font-size: clamp(0.9rem, 3vw, 1.2rem);
     font-weight: 700;
+    color: var(--service-index-color);
 }
 
 /* Team Section */
@@ -894,6 +1021,13 @@ form textarea:focus {
     cursor: pointer;
     text-transform: uppercase;
     font-size: 0.85rem;
+}
+
+.submit-btn:disabled {
+    background: #d9d9d9;
+    color: #959595;
+    cursor: not-allowed;
+    opacity: 1;
 }
 
 @media (min-width: 768px) {

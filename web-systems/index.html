@@ -55,6 +55,7 @@
       "serviceType": ["Web Development", "Business Automation", "Digital Infrastructure", "Admin Dashboards"]
     }
     </script>
+    <script src="/page-transition.js" defer></script>
 </head>
 
 <body class="services-page">
@@ -101,6 +102,7 @@
     <section id="sr-offer" style="padding: 0;">
         <div class="sr-offer-head sr-section">
             <canvas id="hero-sphere" aria-hidden="true"></canvas>
+            <div id="hero-sphere-popups" aria-hidden="true"></div>
             <h1 class="sr-offer-title">
                 <span class="sr-offer-title-line"><span>Digital Systems</span></span>
                 <span class="sr-offer-title-line"><span>Built to</span></span>
@@ -607,41 +609,60 @@
         // ── 3D Wireframe Earth ─────────────────────────
         (function () {
             const canvas = document.getElementById('hero-sphere');
+            const popupLayer = document.getElementById('hero-sphere-popups');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
 
             const LAT_LINES = 9;
             const LON_LINES = 14;
             const SEG       = 96;
+            const INDIA_COUNTRY_ID = 356;
             let   ry        = 0;
             const RX        = 0.30;
 
+            const COUNTRY_COLORS = {
+                india: {
+                    fill: [217, 26, 33],
+                    stroke: [217, 26, 33]
+                },
+                world: {
+                    fill: [184, 190, 198],
+                    stroke: [200, 208, 218]
+                }
+            };
+
+            const POPUP_ICONS = [
+                { icon: 'fa-heart', value: '+24' },
+                { icon: 'fa-comment', value: '12' },
+                { icon: 'fa-thumbs-up', value: '+9' },
+                { icon: 'fa-face-smile', value: '88%' },
+                { icon: 'fa-star', value: '+5' },
+                { icon: 'fa-bolt', value: 'live' },
+                { icon: 'fa-fire', value: 'hot' },
+                { icon: 'fa-paper-plane', value: 'sent' },
+                { icon: 'fa-face-laugh-beam', value: '+3' },
+                { icon: 'fa-bell', value: 'new' },
+                { icon: 'fa-rocket', value: 'boost' },
+                { icon: 'fa-chart-line', value: '+18' },
+                { icon: 'fa-share-nodes', value: 'sync' },
+                { icon: 'fa-check', value: 'done' },
+                { icon: 'fa-envelope', value: 'mail' },
+                { icon: 'fa-circle-play', value: 'go' },
+                { icon: 'fa-globe', value: 'intl' }
+            ];
+            const POPUP_LOOP_DURATION = 3.6;
+            const POPUP_FADE_IN_PORTION = 0.24;
+            const POPUP_FADE_OUT_PORTION = 0.28;
+
             // Pre-processed continent ring data: arrays of {x,y,z} on unit sphere
             let geoRings = [];
+            const popupEls = [];
+            const popupStates = [];
 
-            // Noise fill pattern
-            let noisePattern = null;
-            (function buildNoise() {
-                const ns = 256;
-                const off = document.createElement('canvas');
-                off.width = ns; off.height = ns;
-                const octx = off.getContext('2d');
-                const img  = octx.createImageData(ns, ns);
-                const d    = img.data;
-                for (let i = 0; i < d.length; i += 4) {
-                    d[i]     = 217;
-                    d[i + 1] = 26;
-                    d[i + 2] = 33;
-                    // ~70% of pixels get a visible dot
-                    d[i + 3] = Math.random() < 0.70 ? Math.floor(Math.random() * 160 + 60) : 0;
-                }
-                octx.putImageData(img, 0, 0);
-                noisePattern = ctx.createPattern(off, 'repeat');
-                // Scale grain down to ~0.15px per dot for fine stipple
-                if (noisePattern.setTransform) {
-                    noisePattern.setTransform(new DOMMatrix().scaleSelf(0.15, 0.15));
-                }
-            })();
+            function setPopupContent(popupEl, popupIndex) {
+                const popup = POPUP_ICONS[popupIndex % POPUP_ICONS.length];
+                popupEl.innerHTML = `<i class="fa-solid ${popup.icon}"></i><span>${popup.value}</span>`;
+            }
 
             function resize() {
                 const vw   = window.innerWidth;
@@ -652,9 +673,29 @@
                         : Math.round(Math.min(vw * 0.88, 1400));
                 canvas.width  = size;
                 canvas.height = size;
+                if (popupLayer) {
+                    popupLayer.style.width = size + 'px';
+                    popupLayer.style.height = size + 'px';
+                }
             }
             resize();
             window.addEventListener('resize', resize);
+
+            if (popupLayer) {
+                POPUP_ICONS.forEach((popup, index) => {
+                    const popupEl = document.createElement('div');
+                    popupEl.className = 'sr-sphere-popup';
+                    popupEl.style.opacity = '0';
+                    popupEl.style.setProperty('--popup-delay', (index * 0.11).toFixed(2) + 's');
+                    setPopupContent(popupEl, index);
+                    popupLayer.appendChild(popupEl);
+                    popupEls.push(popupEl);
+                    popupStates.push({
+                        iconIndex: index,
+                        cycleOffset: index * 0.37
+                    });
+                });
+            }
 
             // Convert geographic [lon, lat] degrees to unit sphere {x, y, z}
             function geoToSphere(lon, lat) {
@@ -667,23 +708,29 @@
                 };
             }
 
-            function processGeometry(geometry) {
+            function processGeometry(geometry, isIndia = false) {
                 if (!geometry) return;
                 switch (geometry.type) {
                     case 'Polygon':
                         geometry.coordinates.forEach(ring => {
-                            geoRings.push(ring.map(([lon, lat]) => geoToSphere(lon, lat)));
+                            geoRings.push({
+                                isIndia,
+                                points: ring.map(([lon, lat]) => geoToSphere(lon, lat))
+                            });
                         });
                         break;
                     case 'MultiPolygon':
                         geometry.coordinates.forEach(poly =>
                             poly.forEach(ring => {
-                                geoRings.push(ring.map(([lon, lat]) => geoToSphere(lon, lat)));
+                                geoRings.push({
+                                    isIndia,
+                                    points: ring.map(([lon, lat]) => geoToSphere(lon, lat))
+                                });
                             })
                         );
                         break;
                     case 'GeometryCollection':
-                        geometry.geometries.forEach(processGeometry);
+                        geometry.geometries.forEach(child => processGeometry(child, isIndia));
                         break;
                 }
             }
@@ -694,7 +741,9 @@
                 .then(world => {
                     if (typeof topojson !== 'undefined') {
                         const countries = topojson.feature(world, world.objects.countries);
-                        countries.features.forEach(f => processGeometry(f.geometry));
+                        countries.features.forEach(feature => {
+                            processGeometry(feature.geometry, Number(feature.id) === INDIA_COUNTRY_ID);
+                        });
                     }
                 })
                 .catch(() => {});
@@ -726,36 +775,65 @@
                     const a = pts[i], b = pts[i + 1];
                     const z = (a.z + b.z) * 0.5;
                     const alpha = z >= 0
-                        ? 0.10 + z * 0.07
-                        : Math.max(0.01, 0.03 + z * 0.02);
+                        ? 0.22 + z * 0.10
+                        : Math.max(0.035, 0.07 + z * 0.03);
                     ctx.beginPath();
                     ctx.moveTo(a.x, a.y);
                     ctx.lineTo(b.x, b.y);
-                    ctx.strokeStyle = 'rgba(217,26,33,' + alpha.toFixed(3) + ')';
+                    ctx.strokeStyle = 'rgba(175,182,192,' + alpha.toFixed(3) + ')';
                     ctx.stroke();
                 }
             }
 
-            // Draw a continent boundary ring (fill + outline)
-            function drawGeoRing(pts3d) {
-                const proj = pts3d.map(p => {
+            function drawGlobeGrid() {
+                ctx.lineWidth = 0.8;
+                for (let li = 0; li <= LAT_LINES; li++) {
+                    const lat = -Math.PI / 2 + (Math.PI / LAT_LINES) * li;
+                    const cL  = Math.cos(lat), sL = Math.sin(lat);
+                    const pts = [];
+                    for (let s = 0; s <= SEG; s++) {
+                        const lon = (2 * Math.PI / SEG) * s;
+                        const p   = transform(cL * Math.cos(lon), sL, cL * Math.sin(lon));
+                        const prj = project(p);
+                        pts.push({ x: prj.x, y: prj.y, z: p.z });
+                    }
+                    drawGridLine(pts);
+                }
+                for (let li = 0; li < LON_LINES; li++) {
+                    const lon = (2 * Math.PI / LON_LINES) * li;
+                    const cO  = Math.cos(lon), sO = Math.sin(lon);
+                    const pts = [];
+                    for (let s = 0; s <= SEG; s++) {
+                        const lat = -Math.PI / 2 + (Math.PI / SEG) * s;
+                        const cL  = Math.cos(lat), sL = Math.sin(lat);
+                        const p   = transform(cL * cO, sL, cL * sO);
+                        const prj = project(p);
+                        pts.push({ x: prj.x, y: prj.y, z: p.z });
+                    }
+                    drawGridLine(pts);
+                }
+            }
+
+            // Draw a country ring with a flat fill and depth-faded outline.
+            function drawGeoRing(ring) {
+                const proj = ring.points.map(p => {
                     const t = transform(p.x, p.y, p.z);
                     const q = project(t);
                     return { x: q.x, y: q.y, z: t.z };
                 });
 
                 const avgZ = proj.reduce((s, p) => s + p.z, 0) / proj.length;
+                const palette = ring.isIndia ? COUNTRY_COLORS.india : COUNTRY_COLORS.world;
 
-                // Noise fill — draw for any ring with a visible portion
-                if (avgZ > -0.25 && noisePattern) {
-                    const fillAlpha = Math.min(0.35, Math.max(0.02, 0.18 + avgZ * 0.20));
+                if (avgZ > -0.25) {
+                    const fillAlpha = ring.isIndia
+                        ? Math.min(0.78, Math.max(0.16, 0.34 + avgZ * 0.22))
+                        : Math.min(0.28, Math.max(0.05, 0.12 + avgZ * 0.10));
                     ctx.save();
-                    ctx.globalAlpha = fillAlpha;
                     ctx.beginPath();
                     let penDown = false;
                     for (let i = 0; i < proj.length; i++) {
                         const p = proj[i];
-                        // Break the path at antimeridian jumps instead of skipping the ring
                         const jumped = i > 0 && Math.abs(p.x - proj[i - 1].x) > canvas.width * 0.25;
                         if (!penDown || jumped) {
                             ctx.moveTo(p.x, p.y);
@@ -765,23 +843,22 @@
                         }
                     }
                     ctx.closePath();
-                    ctx.fillStyle = noisePattern;
+                    ctx.fillStyle = `rgba(${palette.fill[0]},${palette.fill[1]},${palette.fill[2]},${fillAlpha.toFixed(3)})`;
                     ctx.fill();
                     ctx.restore();
                 }
 
-                // Outline — skip individual antimeridian-jumping segments
                 for (let i = 0; i < proj.length - 1; i++) {
                     const a = proj[i], b = proj[i + 1];
                     if (Math.abs(b.x - a.x) > canvas.width * 0.25) continue;
                     const z = (a.z + b.z) * 0.5;
-                    const alpha = z >= 0
-                        ? 0.22 + z * 0.15
-                        : Math.max(0.01, 0.03 + z * 0.02);
+                    const alpha = ring.isIndia
+                        ? (z >= 0 ? 0.75 + z * 0.18 : Math.max(0.08, 0.18 + z * 0.08))
+                        : (z >= 0 ? 0.62 + z * 0.12 : Math.max(0.08, 0.16 + z * 0.05));
                     ctx.beginPath();
                     ctx.moveTo(a.x, a.y);
                     ctx.lineTo(b.x, b.y);
-                    ctx.strokeStyle = 'rgba(217,26,33,' + alpha.toFixed(3) + ')';
+                    ctx.strokeStyle = `rgba(${palette.stroke[0]},${palette.stroke[1]},${palette.stroke[2]},${alpha.toFixed(3)})`;
                     ctx.stroke();
                 }
             }
@@ -790,54 +867,31 @@
             const ARC_SEGS   = 72;
             const ARC_HEIGHT = 0.09; // how far arcs lift above sphere surface
 
-            // Major cities as [lon, lat]
+            // Kolkata-origin network points as [lon, lat]
             const CITY_LL = [
-                [-74.0,  40.7],  //  0 New York
-                [  0.0,  51.5],  //  1 London
-                [ 55.3,  25.2],  //  2 Dubai
-                [ 72.8,  19.1],  //  3 Mumbai
-                [103.8,   1.3],  //  4 Singapore
-                [139.7,  35.7],  //  5 Tokyo
-                [-118.2, 34.1],  //  6 Los Angeles
-                [-46.6, -23.5],  //  7 São Paulo
-                [  3.4,   6.5],  //  8 Lagos
-                [ 18.4, -33.9],  //  9 Cape Town
-                [ 31.2,  30.1],  // 10 Cairo
-                [ 37.6,  55.8],  // 11 Moscow
-                [126.9,  37.6],  // 12 Seoul
-                [151.2, -33.9],  // 13 Sydney
-                [-58.4, -34.6],  // 14 Buenos Aires
-                [116.4,  39.9],  // 15 Beijing
-                [ 28.0,  -26.2], // 16 Johannesburg
-                [-99.1,  19.4],  // 17 Mexico City
+                [ 88.3639, 22.5726], //  0 Kolkata
+                [-74.0,   40.7],     //  1 United States
+                [ -0.1,   51.5],     //  2 United Kingdom
+                [ 55.3,   25.2],     //  3 United Arab Emirates
+                [103.8,    1.3],     //  4 Singapore
+                [139.7,   35.7],     //  5 Japan
+                [-46.6,  -23.5],     //  6 Brazil
+                [  3.4,    6.5],     //  7 Nigeria
+                [ 18.4,  -33.9],     //  8 South Africa
+                [ 31.2,   30.1],     //  9 Egypt
+                [ 37.6,   55.8],     // 10 Russia
+                [126.9,   37.6],     // 11 South Korea
+                [151.2,  -33.9],     // 12 Australia
+                [-58.4,  -34.6],     // 13 Argentina
+                [116.4,   39.9],     // 14 China
+                [-99.1,   19.4],     // 15 Mexico
+                [  2.35,  48.86],    // 16 France
+                [ 13.4,   52.52],    // 17 Germany
             ];
             const CITY_SPHERE_PTS = CITY_LL.map(([lon, lat]) => geoToSphere(lon, lat));
 
-            // Route pairs [cityA, cityB]
-            const ROUTE_PAIRS = [
-                [0, 1],  // NY ↔ London          (Atlantic)
-                [1, 2],  // London ↔ Dubai
-                [2, 3],  // Dubai ↔ Mumbai
-                [3, 4],  // Mumbai ↔ Singapore
-                [4, 5],  // Singapore ↔ Tokyo
-                [5, 6],  // Tokyo ↔ LA            (Pacific)
-                [6, 0],  // LA ↔ NY
-                [1, 8],  // London ↔ Lagos
-                [8, 9],  // Lagos ↔ Cape Town
-                [9, 16], // Cape Town ↔ Johannesburg
-                [0, 7],  // NY ↔ São Paulo
-                [7, 14], // São Paulo ↔ Buenos Aires
-                [2, 10], // Dubai ↔ Cairo
-                [10, 11],// Cairo ↔ Moscow
-                [11, 12],// Moscow ↔ Seoul
-                [12, 15],// Seoul ↔ Beijing
-                [15, 5], // Beijing ↔ Tokyo
-                [13, 4], // Sydney ↔ Singapore
-                [6, 13], // LA ↔ Sydney           (Pacific)
-                [0, 17], // NY ↔ Mexico City
-                [4, 2],  // Singapore ↔ Dubai
-                [1, 11], // London ↔ Moscow
-            ];
+            const KOLKATA_ROUTE_INDEX = 0;
+            const ROUTE_PAIRS = CITY_LL.slice(1).map((_, index) => [KOLKATA_ROUTE_INDEX, index + 1]);
 
             // Spherical linear interpolation between two unit vectors
             function slerp(a, b, t) {
@@ -864,11 +918,59 @@
                     pts,
                     phase: ri / ROUTE_PAIRS.length,            // stagger phases
                     speed: 0.00014 + (ri % 7) * 0.000022,      // varied speeds
+                    popupPhase: ri * 0.55,
                 };
             });
 
+            function updatePopup(arcIndex, endpoint, depth, now) {
+                const popupEl = popupEls[arcIndex];
+                const popupState = popupStates[arcIndex];
+                if (!popupEl) return;
+
+                if (depth <= -0.02) {
+                    popupEl.style.opacity = '0';
+                    return;
+                }
+
+                const cyclePosition = ((now + popupState.cycleOffset) % POPUP_LOOP_DURATION) / POPUP_LOOP_DURATION;
+                const fadeInEnd = POPUP_FADE_IN_PORTION;
+                const fadeOutStart = 1 - POPUP_FADE_OUT_PORTION;
+                let lifecycleOpacity = 1;
+
+                if (cyclePosition < fadeInEnd) {
+                    lifecycleOpacity = cyclePosition / fadeInEnd;
+                } else if (cyclePosition > fadeOutStart) {
+                    lifecycleOpacity = 1 - ((cyclePosition - fadeOutStart) / POPUP_FADE_OUT_PORTION);
+                }
+
+                if (cyclePosition > 0.985 && !popupState.pendingRefresh) {
+                    popupState.pendingRefresh = true;
+                    popupState.iconIndex = (popupState.iconIndex + 3 + arcIndex) % POPUP_ICONS.length;
+                    setPopupContent(popupEl, popupState.iconIndex);
+                } else if (cyclePosition < 0.85) {
+                    popupState.pendingRefresh = false;
+                }
+
+                const center = canvas.width * 0.5;
+                const dx = endpoint.x - center;
+                const dy = endpoint.y - center;
+                const distance = Math.hypot(dx, dy) || 1;
+                const offset = 24;
+                const x = endpoint.x + (dx / distance) * offset;
+                const y = endpoint.y + (dy / distance) * offset;
+                const pulse = 0.5 + 0.5 * Math.sin(now * 2.1 + arcs[arcIndex].popupPhase);
+                const visibility = Math.min(1, Math.max(0, 0.25 + depth * 0.9));
+                const opacity = visibility * lifecycleOpacity;
+                const translateY = 12 - pulse * 18 + (1 - lifecycleOpacity) * 10;
+                const scale = 0.88 + lifecycleOpacity * 0.16 + pulse * 0.05;
+
+                popupEl.style.opacity = opacity.toFixed(3);
+                popupEl.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, calc(-50% - ${translateY.toFixed(1)}px)) scale(${scale.toFixed(3)})`;
+            }
+
             function drawArcs() {
-                arcs.forEach(arc => {
+                const now = performance.now() * 0.001;
+                arcs.forEach((arc, arcIndex) => {
                     arc.phase = (arc.phase + arc.speed) % 1;
 
                     const n    = arc.pts.length;
@@ -915,43 +1017,20 @@
                         ctx.fillStyle = `rgba(217,26,33,${da.toFixed(3)})`;
                         ctx.fill();
                     }
+
+                    updatePopup(arcIndex, proj[n - 1], proj[n - 1].z, now);
                 });
             }
 
             function draw() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                // Grid lines — thin and subtle
-                ctx.lineWidth = 0.7;
-                for (let li = 0; li <= LAT_LINES; li++) {
-                    const lat = -Math.PI / 2 + (Math.PI / LAT_LINES) * li;
-                    const cL  = Math.cos(lat), sL = Math.sin(lat);
-                    const pts = [];
-                    for (let s = 0; s <= SEG; s++) {
-                        const lon = (2 * Math.PI / SEG) * s;
-                        const p   = transform(cL * Math.cos(lon), sL, cL * Math.sin(lon));
-                        const prj = project(p);
-                        pts.push({ x: prj.x, y: prj.y, z: p.z });
-                    }
-                    drawGridLine(pts);
-                }
-                for (let li = 0; li < LON_LINES; li++) {
-                    const lon = (2 * Math.PI / LON_LINES) * li;
-                    const cO  = Math.cos(lon), sO = Math.sin(lon);
-                    const pts = [];
-                    for (let s = 0; s <= SEG; s++) {
-                        const lat = -Math.PI / 2 + (Math.PI / SEG) * s;
-                        const cL  = Math.cos(lat), sL = Math.sin(lat);
-                        const p   = transform(cL * cO, sL, cL * sO);
-                        const prj = project(p);
-                        pts.push({ x: prj.x, y: prj.y, z: p.z });
-                    }
-                    drawGridLine(pts);
-                }
-
                 // Continent outlines — brighter, on top of grid
                 ctx.lineWidth = 1.1;
                 geoRings.forEach(ring => drawGeoRing(ring));
+
+                // Latitude and longitude lines should sit above the fills.
+                drawGlobeGrid();
 
                 // Arc connections — on top of everything
                 drawArcs();
