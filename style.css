@@ -12,6 +12,7 @@
     --service-red-4: #ed6d72;
     --service-red-5: #f48c90;
     --service-red-6: #f8acae;
+    --service-red-7: #fbc8ca;
 }
 
 * {
@@ -625,6 +626,15 @@ section {
     --service-index-color: rgba(61, 15, 17, 0.94);
 }
 
+.service-row:nth-child(7) {
+    top: 136px;
+    z-index: 7;
+    background: var(--service-red-7);
+    --service-title-color: #2e0a0b;
+    --service-body-color: rgba(46, 10, 11, 0.85);
+    --service-index-color: rgba(46, 10, 11, 0.9);
+}
+
 .service-content {
     max-width: 760px;
 }
@@ -675,6 +685,13 @@ section {
         z-index: 6;
         background: var(--service-red-6);
         color: #3d0f11;
+    }
+
+    .service-row:nth-child(7) {
+        top: 96px;
+        z-index: 7;
+        background: var(--service-red-7);
+        color: #2e0a0b;
     }
 }
 
