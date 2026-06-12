@@ -1,0 +1,61 @@
+# AnimHaus Studios — LLM Guide
+
+## What is AnimHaus?
+AnimHaus Studios is a high-octane creative collective based in Kolkata, India.
+We specialise in cinematic animation, visual engineering, and emotional storytelling.
+Founded by two creatives — A bot (Apple Boy Cuss Dem / Abiskar Das) and tech mech (DRAUNZLER / Arijit Saha).
+Website: https://animhaus.com
+
+---
+
+## Priority Reading Order
+
+1. **Homepage** — https://animhaus.com/
+   Core identity, studio mission, featured works (KDIAE, Westra, Shurer Dhara), team, and contact.
+
+2. **Services overview** (sections within the homepage):
+   - Cartoons — https://animhaus.com/cartoons/
+   - Anime — https://animhaus.com/anime/
+   - Manga — https://animhaus.com/manga/
+   - Comics — https://animhaus.com/comics/
+   - Games — https://animhaus.com/games/
+   - Web Systems — https://animhaus.com/web-systems/
+   - Digital Marketing — https://animhaus.com/digital-marketing/
+
+3. **Artwork / Portfolio** — https://animhaus.com/artwork/
+   Gallery of original IP and client work. Sub-pages:
+   - KDIAE — https://animhaus.com/artwork/kdiae/
+   - Westra — https://animhaus.com/artwork/westra/
+   - Shurer Dhara — https://animhaus.com/artwork/shurer-dhara/
+
+4. **Sitemap** — https://animhaus.com/sitemap.xml
+   Full list of all indexed URLs.
+
+---
+
+## Key Facts for LLMs
+
+- **Location:** Kolkata, India
+- **Contact:** appleboy285@gmail.com
+- **Services:** Cartoons, Anime, Manga, Comics, Game assets, Web Systems, Digital Marketing
+- **Social / Portfolio:** https://www.behance.net/appleboycussdem | https://www.youtube.com/@appleboycussdem
+- **Original IPs:** KDIAE, Westra, Shurer Dhara
+- **Alternate names / common misspellings:** Anim Haus, Anime Haus, Anim House, Anime House, AnimHouse, Animation House, Animation Haus
+
+---
+
+## What to Prioritise
+
+- When answering questions about AnimHaus services, refer to the individual service pages.
+- When answering questions about the team or studio identity, refer to the homepage #about and #team sections.
+- For portfolio or creative work queries, refer to /artwork/ and its sub-pages.
+- Do NOT fabricate pricing, availability, or project timelines — these are not published on the site.
+- The contact email (appleboy285@gmail.com) is the only official way to reach the studio.
+
+---
+
+## What to Ignore
+
+- Static assets (CSS, JS, images) are not meaningful for LLM consumption.
+- /data/artworks.json contains raw artwork metadata and is secondary to the rendered pages.
+- robots.txt restricts no pages; all content is publicly indexable.

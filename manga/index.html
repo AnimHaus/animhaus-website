@@ -29,9 +29,379 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script src="/page-transition.js" defer></script>
+
+    <style>
+        /* ── Hero split layout ── */
+        #cr-hero {
+            justify-content: center;
+            gap: 0;
+        }
+        .cr-hero-split {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 48px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 48px;
+        }
+        @media (min-width: 1024px) {
+            .cr-hero-split {
+                grid-template-columns: 1fr 1fr;
+                align-items: center;
+                gap: 72px;
+            }
+        }
+
+        /* ── Manga panel collage ── */
+        .cr-hero-visual { display: none; }
+        @media (min-width: 1024px) { .cr-hero-visual { display: block; } }
+
+        .cr-manga-panel-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 300px 220px;
+            gap: 4px;
+            position: relative;
+        }
+        .cr-mp { overflow: hidden; position: relative; }
+        .cr-mp img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            display: block;
+        }
+        .cr-mp:hover img { transform: scale(1.04); }
+        .cr-mp-label {
+            position: absolute;
+            bottom: 10px; left: 12px;
+            font-size: 0.55rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.7);
+            font-weight: 700;
+            z-index: 2;
+        }
+        .mp-1 { grid-row: 1 / 3; }
+        .mp-2 { grid-column: 2; grid-row: 1; }
+        .mp-3 { grid-column: 2; grid-row: 2; }
+        /* Manga panel border overlay */
+        .cr-manga-panel-grid::before {
+            content: '';
+            position: absolute; inset: 0;
+            outline: 3px solid var(--black);
+            outline-offset: -3px;
+            pointer-events: none;
+            z-index: 3;
+        }
+        .cr-manga-panel-grid::after {
+            content: 'AnimHaus Manga';
+            position: absolute;
+            top: -1px; right: -1px;
+            background: var(--red);
+            color: var(--white);
+            font-size: 0.55rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 6px 12px;
+            z-index: 4;
+        }
+
+        /* ── Visual showcase strip ── */
+        #cr-visual-strip { padding: 0; overflow: hidden; }
+        .cr-strip-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2px;
+        }
+        @media (min-width: 768px) {
+            .cr-strip-grid { grid-template-columns: 1fr 1.3fr 1fr; min-height: 440px; }
+        }
+        .cr-strip-item {
+            position: relative;
+            overflow: hidden;
+            min-height: 260px;
+        }
+        @media (min-width: 768px) { .cr-strip-item { min-height: auto; } }
+        .cr-strip-item img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.7s cubic-bezier(0.16,1,0.3,1);
+        }
+        .cr-strip-item:hover img { transform: scale(1.05); }
+        .cr-strip-overlay {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 32px 24px 28px;
+            background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 100%);
+        }
+        .cr-strip-overlay span {
+            font-size: 0.62rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.85);
+            font-weight: 700;
+            display: block;
+        }
+        .cr-strip-overlay strong {
+            font-size: 1rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 900;
+            color: #fff;
+            display: block;
+            margin-top: 6px;
+            letter-spacing: -0.3px;
+        }
+
+        /* ── Art style cards with images ── */
+        .cr-style-item { padding: 0; overflow: hidden; }
+        .cr-style-img {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+        }
+        .cr-style-img img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+        }
+        .cr-style-item:hover .cr-style-img img { transform: scale(1.06); }
+        .cr-style-content { padding: 28px 28px 32px; }
+        .cr-style-content i {
+            font-size: 1.4rem;
+            color: var(--red);
+            margin-bottom: 16px;
+            display: block;
+        }
+        .cr-style-content h4 {
+            font-size: 1rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 800;
+            color: var(--black);
+            margin: 0 0 10px;
+        }
+        .cr-style-content p {
+            font-size: 0.87rem;
+            color: rgba(17,17,17,0.52);
+            line-height: 1.6;
+            margin: 0;
+        }
+        /* ── Scroll progress bar ── */
+        #scroll-progress {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 3px;
+            background: var(--red);
+            transform-origin: left;
+            transform: scaleX(0);
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        /* ── Section header: let GSAP handle h2 words; show container immediately ── */
+        .cr-section-header.cr-reveal {
+            opacity: 1 !important;
+            transform: none !important;
+            transition: none !important;
+        }
+        .cr-section-header p {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s 0.3s ease, transform 0.8s 0.3s ease;
+        }
+        .cr-section-header.active p {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* ── Word-split animation ── */
+        .word-wrap {
+            display: inline-block;
+            overflow: hidden;
+            vertical-align: bottom;
+            line-height: 1.05;
+        }
+        .word { display: inline-block; }
+        /* preserve red color only on the explicitly marked second line */
+        .cr-hero-title .hero-red .word-wrap,
+        .cr-hero-title .hero-red .word { color: var(--red); }
+
+        /* ── Marquee strip ── */
+        .cr-marquee {
+            overflow: hidden;
+            background: var(--black);
+            padding: 14px 0;
+            border-top: none;
+            border-bottom: none;
+        }
+        .cr-marquee-track {
+            display: inline-flex;
+            white-space: nowrap;
+            animation: mgMarquee 28s linear infinite;
+        }
+        .cr-marquee:hover .cr-marquee-track { animation-play-state: paused; }
+        .cr-marquee-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 20px;
+            padding: 0 36px;
+            font-size: 0.62rem;
+            font-weight: 800;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.35);
+        }
+        .cr-marquee-item .mq-dot {
+            width: 5px; height: 5px;
+            background: var(--red);
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .cr-marquee-item.highlight { color: rgba(255,255,255,0.9); }
+        @keyframes mgMarquee {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-50%); }
+        }
+
+        /* ── CTA diagonal carousel ── */
+        #cr-cta {
+            position: relative;
+            overflow: hidden;
+            /* override creative.css reddish tint — match page bg */
+            background: var(--light) !important;
+            border-top: 1px solid rgba(17,17,17,0.08) !important;
+        }
+        .cr-cta-inner {
+            position: relative;
+            z-index: 2;
+        }
+        .cr-cta-carousel {
+            position: absolute;
+            top: -10%;
+            right: 5%;
+            width: 340px;
+            height: 120%;
+            display: flex;
+            gap: 6px;
+            pointer-events: none;
+            z-index: 1;
+            /* diagonal tilt */
+            transform: rotate(-8deg) translateX(20px);
+            transform-origin: top right;
+            mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+        }
+        @media (max-width: 767px) { .cr-cta-carousel { display: none; } }
+        .cr-cta-strip {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            will-change: transform;
+        }
+        .cr-cta-strip img {
+            width: 100%;
+            aspect-ratio: 2 / 3;
+            object-fit: cover;
+            display: block;
+            border-radius: 2px;
+            opacity: 0.45;
+        }
+        /* CSS-driven infinite scroll — no JS timing/measurement needed */
+        @keyframes ctaScrollUp {
+            from { transform: translateY(0); }
+            to   { transform: translateY(-50%); }
+        }
+        @keyframes ctaScrollDown {
+            from { transform: translateY(-50%); }
+            to   { transform: translateY(0); }
+        }
+        #cta-strip-a { animation: ctaScrollUp   22s linear infinite; }
+        #cta-strip-b { animation: ctaScrollDown 18s linear infinite; }
+        /* fade left edge into bg */
+        #cr-cta::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 260px;
+            width: 160px; height: 100%;
+            background: linear-gradient(to right, var(--light) 0%, transparent 100%);
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        #cr-gallery {
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            background: var(--black);
+        }
+        .cr-gallery-label {
+            position: absolute;
+            top: 36px;
+            left: 5%;
+            z-index: 10;
+            display: flex;
+            align-items: baseline;
+            gap: 20px;
+        }
+        @media (min-width: 768px)  { .cr-gallery-label { left: 8%;  } }
+        @media (min-width: 1280px) { .cr-gallery-label { left: 10%; } }
+        .cr-gallery-label > span {
+            font-size: 0.6rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.85);
+            font-weight: 800;
+        }
+        .cr-gallery-label > em {
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+            font-style: normal;
+        }
+        .cr-gallery-track {
+            display: flex;
+            gap: 3px;
+            height: 100%;
+            will-change: transform;
+            padding-top: 0;
+        }
+        .cr-gallery-item {
+            flex-shrink: 0;
+            width: 220px;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+        @media (min-width: 768px)  { .cr-gallery-item { width: 270px; } }
+        @media (min-width: 1280px) { .cr-gallery-item { width: 300px; } }
+        .cr-gallery-item img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+        }
+        .cr-gallery-item:hover img { transform: scale(1.04); }
+        .cr-gallery-num {
+            position: absolute;
+            bottom: 14px; left: 14px;
+            font-size: 0.55rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.4);
+            pointer-events: none;
+        }
+    </style>
 </head>
 
 <body class="creative-page">
+
+    <!-- Scroll progress -->
+    <div id="scroll-progress"></div>
 
     <!-- NAV -->
     <nav class="navbar">
@@ -62,13 +432,30 @@
     <section id="cr-hero">
         <div class="cr-hero-glow"></div>
         <div class="cr-hero-glow-left"></div>
-        <div class="cr-hero-content">
-            <p class="cr-hero-eyebrow">Manga & Sequential Art — AnimHaus</p>
-            <h1 class="cr-hero-title">Stories Told<br><em>Panel by Panel.</em></h1>
-            <p class="cr-hero-sub">AnimHaus creates original manga, webtoons, and sequential art that hold their own on any platform — from Tapas and Webtoon to print volumes and anthologies.</p>
-            <div class="cr-hero-ctas">
-                <a href="#cr-pricing" class="cr-btn-primary">View Packages <i class="fas fa-arrow-right"></i></a>
-                <a href="#cr-cta" class="cr-btn-secondary">Start a Project</a>
+        <div class="cr-hero-split">
+            <div class="cr-hero-content">
+                <h1 class="cr-hero-title">Stories Told<br><span class="hero-red">Panel by Panel.</span></h1>
+                <p class="cr-hero-sub">AnimHaus creates original manga, webtoons, and sequential art that hold their own on any platform — from Tapas and Webtoon to print volumes and anthologies.</p>
+                <div class="cr-hero-ctas">
+                    <a href="#cr-pricing" class="cr-btn-primary">View Packages <i class="fas fa-arrow-right"></i></a>
+                    <a href="#cr-cta" class="cr-btn-secondary">Start a Project</a>
+                </div>
+            </div>
+            <div class="cr-hero-visual">
+                <div class="cr-manga-panel-grid">
+                    <div class="cr-mp mp-1">
+                        <img src="manga/manga_10.jpg" alt="AnimHaus manga panel — action sequence" loading="eager">
+                        <span class="cr-mp-label">Action</span>
+                    </div>
+                    <div class="cr-mp mp-2">
+                        <img src="manga/manga_8.jpg" alt="AnimHaus manga panel — character close-up" loading="eager">
+                        <span class="cr-mp-label">Character</span>
+                    </div>
+                    <div class="cr-mp mp-3">
+                        <img src="manga/manga_15.jpg" alt="AnimHaus manga panel — multi-panel page" loading="eager">
+                        <span class="cr-mp-label">Sequential</span>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="cr-hero-trust">
@@ -79,12 +466,33 @@
         </div>
     </section>
 
+    <!-- MARQUEE -->
+    <div class="cr-marquee">
+        <div class="cr-marquee-track">
+            <span class="cr-marquee-item">Original Manga <span class="mq-dot"></span></span>
+            <span class="cr-marquee-item highlight">AnimHaus Studios <span class="mq-dot"></span></span>
+            <span class="cr-marquee-item">Sequential Art <span class="mq-dot"></span></span>
+            <span class="cr-marquee-item">Panel by Panel <span class="mq-dot"></span></span>
+            <span class="cr-marquee-item">Webtoon &amp; Print <span class="mq-dot"></span></span>
+            <span class="cr-marquee-item highlight">From Kolkata <span class="mq-dot"></span></span>
+            <span class="cr-marquee-item">Character-First <span class="mq-dot"></span></span>
+            <span class="cr-marquee-item">Story-Led <span class="mq-dot"></span></span>
+            <span class="cr-marquee-item">Original Manga <span class="mq-dot"></span></span>
+            <span class="cr-marquee-item highlight">AnimHaus Studios <span class="mq-dot"></span></span>
+            <span class="cr-marquee-item">Sequential Art <span class="mq-dot"></span></span>
+            <span class="cr-marquee-item">Panel by Panel <span class="mq-dot"></span></span>
+            <span class="cr-marquee-item">Webtoon &amp; Print <span class="mq-dot"></span></span>
+            <span class="cr-marquee-item highlight">From Kolkata <span class="mq-dot"></span></span>
+            <span class="cr-marquee-item">Character-First <span class="mq-dot"></span></span>
+            <span class="cr-marquee-item">Story-Led <span class="mq-dot"></span></span>
+        </div>
+    </div>
+
     <div class="cr-divider"></div>
 
     <!-- WHAT WE CREATE -->
     <section id="cr-create" class="cr-section">
         <div class="cr-section-header cr-reveal">
-            <span class="cr-label">Our Scope</span>
             <h2>What We<br>Illustrate.</h2>
             <p>Every page we produce is drawn with intention — lettering, pacing, and art that serve the story, not the other way around.</p>
         </div>
@@ -131,6 +539,35 @@
 
     <div class="cr-divider"></div>
 
+    <!-- VISUAL SHOWCASE STRIP -->
+    <section id="cr-visual-strip">
+        <div class="cr-strip-grid">
+            <div class="cr-strip-item">
+                <img src="manga/manga_3.jpg" alt="AnimHaus manga — atmospheric character storytelling" loading="lazy">
+                <div class="cr-strip-overlay">
+                    <span>01 — Character Design</span>
+                    <strong>Every face, a world.</strong>
+                </div>
+            </div>
+            <div class="cr-strip-item">
+                <img src="manga/manga_15.jpg" alt="AnimHaus manga — multi-panel page layout" loading="lazy">
+                <div class="cr-strip-overlay">
+                    <span>02 — Panel Storytelling</span>
+                    <strong>Tension in every frame.</strong>
+                </div>
+            </div>
+            <div class="cr-strip-item">
+                <img src="manga/manga_8.jpg" alt="AnimHaus manga — character expression and dialogue" loading="lazy">
+                <div class="cr-strip-overlay">
+                    <span>03 — Sequential Art</span>
+                    <strong>Built for the shelf.</strong>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="cr-divider"></div>
+
     <!-- PROCESS -->
     <section id="cr-process" class="cr-section">
         <div class="cr-section-header cr-reveal">
@@ -163,6 +600,36 @@
         </div>
     </section>
 
+    <!-- ORIGINAL PAGES — HORIZONTAL GALLERY -->
+    <section id="cr-gallery">
+        <div class="cr-gallery-label">
+            <span>Original Pages</span>
+            <em>Scroll to explore →</em>
+        </div>
+        <div class="cr-gallery-track">
+            <div class="cr-gallery-item"><img src="manga/manga_1.jpg"  alt="AnimHaus manga page 01"  loading="lazy"><span class="cr-gallery-num">01</span></div>
+            <div class="cr-gallery-item"><img src="manga/manga_2.jpg"  alt="AnimHaus manga page 02"  loading="lazy"><span class="cr-gallery-num">02</span></div>
+            <div class="cr-gallery-item"><img src="manga/manga_3.jpg"  alt="AnimHaus manga page 03"  loading="lazy"><span class="cr-gallery-num">03</span></div>
+            <div class="cr-gallery-item"><img src="manga/manga_4.jpg"  alt="AnimHaus manga page 04"  loading="lazy"><span class="cr-gallery-num">04</span></div>
+            <div class="cr-gallery-item"><img src="manga/manga_5.jpg"  alt="AnimHaus manga page 05"  loading="lazy"><span class="cr-gallery-num">05</span></div>
+            <div class="cr-gallery-item"><img src="manga/manga_6.jpg"  alt="AnimHaus manga page 06"  loading="lazy"><span class="cr-gallery-num">06</span></div>
+            <div class="cr-gallery-item"><img src="manga/manga_7.jpg"  alt="AnimHaus manga page 07"  loading="lazy"><span class="cr-gallery-num">07</span></div>
+            <div class="cr-gallery-item"><img src="manga/manga_8.jpg"  alt="AnimHaus manga page 08"  loading="lazy"><span class="cr-gallery-num">08</span></div>
+            <div class="cr-gallery-item"><img src="manga/manga_9.jpg"  alt="AnimHaus manga page 09"  loading="lazy"><span class="cr-gallery-num">09</span></div>
+            <div class="cr-gallery-item"><img src="manga/manga_10.jpg" alt="AnimHaus manga page 10"  loading="lazy"><span class="cr-gallery-num">10</span></div>
+            <div class="cr-gallery-item"><img src="manga/manga_11.jpg" alt="AnimHaus manga page 11"  loading="lazy"><span class="cr-gallery-num">11</span></div>
+            <div class="cr-gallery-item"><img src="manga/manga_12.jpg" alt="AnimHaus manga page 12"  loading="lazy"><span class="cr-gallery-num">12</span></div>
+            <div class="cr-gallery-item"><img src="manga/manga_13.jpg" alt="AnimHaus manga page 13"  loading="lazy"><span class="cr-gallery-num">13</span></div>
+            <div class="cr-gallery-item"><img src="manga/manga_14.jpg" alt="AnimHaus manga page 14"  loading="lazy"><span class="cr-gallery-num">14</span></div>
+            <div class="cr-gallery-item"><img src="manga/manga_15.jpg" alt="AnimHaus manga page 15"  loading="lazy"><span class="cr-gallery-num">15</span></div>
+            <div class="cr-gallery-item"><img src="manga/manga_16.jpg" alt="AnimHaus manga page 16"  loading="lazy"><span class="cr-gallery-num">16</span></div>
+            <div class="cr-gallery-item"><img src="manga/manga_17.jpg" alt="AnimHaus manga page 17"  loading="lazy"><span class="cr-gallery-num">17</span></div>
+            <div class="cr-gallery-item"><img src="manga/manga_18.jpg" alt="AnimHaus manga page 18"  loading="lazy"><span class="cr-gallery-num">18</span></div>
+            <div class="cr-gallery-item"><img src="manga/manga_19.jpg" alt="AnimHaus manga page 19"  loading="lazy"><span class="cr-gallery-num">19</span></div>
+            <div class="cr-gallery-item"><img src="manga/manga_20.jpg" alt="AnimHaus manga page 20"  loading="lazy"><span class="cr-gallery-num">20</span></div>
+        </div>
+    </section>
+
     <div class="cr-divider"></div>
 
     <!-- ART STYLES -->
@@ -175,24 +642,44 @@
 
         <div class="cr-styles-grid">
             <div class="cr-style-item cr-reveal">
-                <i class="fas fa-tint"></i>
-                <h4>Classic Manga B&W</h4>
-                <p>Traditional ink and screentone manga — clean, high-contrast, and suited for print and digital publication.</p>
+                <div class="cr-style-img">
+                    <img src="manga/manga_3.jpg" alt="Classic B&W manga — AnimHaus" loading="lazy">
+                </div>
+                <div class="cr-style-content">
+                    <i class="fas fa-tint"></i>
+                    <h4>Classic Manga B&W</h4>
+                    <p>Traditional ink and screentone manga — clean, high-contrast, and suited for print and digital publication.</p>
+                </div>
             </div>
             <div class="cr-style-item cr-reveal cr-reveal-delay-1">
-                <i class="fas fa-palette"></i>
-                <h4>Full Colour Webtoon</h4>
-                <p>Vibrant digital colour styles for webtoon platforms — flat, cel-shaded, or painterly depending on the genre.</p>
+                <div class="cr-style-img">
+                    <img src="manga/manga_8.jpg" alt="Full colour webtoon — AnimHaus" loading="lazy">
+                </div>
+                <div class="cr-style-content">
+                    <i class="fas fa-palette"></i>
+                    <h4>Full Colour Webtoon</h4>
+                    <p>Vibrant digital colour styles for webtoon platforms — flat, cel-shaded, or painterly depending on the genre.</p>
+                </div>
             </div>
             <div class="cr-style-item cr-reveal cr-reveal-delay-2">
-                <i class="fas fa-brush"></i>
-                <h4>Painterly & Expressive</h4>
-                <p>Loose, textured, illustrative work with a strong artistic presence — ideal for prestige or art-book production.</p>
+                <div class="cr-style-img">
+                    <img src="manga/manga_10.jpg" alt="Painterly expressive manga — AnimHaus" loading="lazy">
+                </div>
+                <div class="cr-style-content">
+                    <i class="fas fa-brush"></i>
+                    <h4>Painterly & Expressive</h4>
+                    <p>Loose, textured, illustrative work with a strong artistic presence — ideal for prestige or art-book production.</p>
+                </div>
             </div>
             <div class="cr-style-item cr-reveal cr-reveal-delay-3">
-                <i class="fas fa-layer-group"></i>
-                <h4>Manhwa / Korean Style</h4>
-                <p>Clean lines, modern proportions, and webtoon-native formatting — built for vertical scroll platforms.</p>
+                <div class="cr-style-img">
+                    <img src="manga/manga_15.jpg" alt="Manhwa webtoon style — AnimHaus" loading="lazy">
+                </div>
+                <div class="cr-style-content">
+                    <i class="fas fa-layer-group"></i>
+                    <h4>Manhwa / Korean Style</h4>
+                    <p>Clean lines, modern proportions, and webtoon-native formatting — built for vertical scroll platforms.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -209,7 +696,6 @@
 
         <div class="cr-pricing-grid">
             <div class="cr-tier cr-reveal">
-                <span class="cr-tier-number">Tier 01</span>
                 <h3>Chapter</h3>
                 <p class="cr-tier-tag">For creators needing a single polished chapter, one-shot, or short-form sequential piece.</p>
                 <div class="cr-tier-divider"></div>
@@ -229,7 +715,6 @@
 
             <div class="cr-tier featured cr-reveal cr-reveal-delay-1">
                 <div class="cr-tier-badge">Most Popular</div>
-                <span class="cr-tier-number">Tier 02</span>
                 <h3>Volume</h3>
                 <p class="cr-tier-tag">For creators launching a multi-chapter manga or webtoon season with full character and world consistency.</p>
                 <div class="cr-tier-divider"></div>
@@ -249,7 +734,6 @@
             </div>
 
             <div class="cr-tier cr-reveal cr-reveal-delay-2">
-                <span class="cr-tier-number">Tier 03</span>
                 <h3>Series</h3>
                 <p class="cr-tier-tag">For creators building a long-running serialised manga or webtoon with ongoing chapter production.</p>
                 <div class="cr-tier-divider"></div>
@@ -327,7 +811,44 @@
 
     <!-- CTA -->
     <section id="cr-cta">
-        <div class="cr-reveal">
+        <!-- Diagonal carousel background -->
+        <div class="cr-cta-carousel" aria-hidden="true">
+            <div class="cr-cta-strip" id="cta-strip-a">
+                <img src="manga/manga_1.jpg"  alt="">
+                <img src="manga/manga_4.jpg"  alt="">
+                <img src="manga/manga_7.jpg"  alt="">
+                <img src="manga/manga_11.jpg" alt="">
+                <img src="manga/manga_14.jpg" alt="">
+                <img src="manga/manga_17.jpg" alt="">
+                <img src="manga/manga_20.jpg" alt="">
+                <!-- duplicate for seamless loop -->
+                <img src="manga/manga_1.jpg"  alt="">
+                <img src="manga/manga_4.jpg"  alt="">
+                <img src="manga/manga_7.jpg"  alt="">
+                <img src="manga/manga_11.jpg" alt="">
+                <img src="manga/manga_14.jpg" alt="">
+                <img src="manga/manga_17.jpg" alt="">
+                <img src="manga/manga_20.jpg" alt="">
+            </div>
+            <div class="cr-cta-strip" id="cta-strip-b">
+                <img src="manga/manga_2.jpg"  alt="">
+                <img src="manga/manga_5.jpg"  alt="">
+                <img src="manga/manga_9.jpg"  alt="">
+                <img src="manga/manga_12.jpg" alt="">
+                <img src="manga/manga_15.jpg" alt="">
+                <img src="manga/manga_18.jpg" alt="">
+                <img src="manga/manga_3.jpg"  alt="">
+                <!-- duplicate for seamless loop -->
+                <img src="manga/manga_2.jpg"  alt="">
+                <img src="manga/manga_5.jpg"  alt="">
+                <img src="manga/manga_9.jpg"  alt="">
+                <img src="manga/manga_12.jpg" alt="">
+                <img src="manga/manga_15.jpg" alt="">
+                <img src="manga/manga_18.jpg" alt="">
+                <img src="manga/manga_3.jpg"  alt="">
+            </div>
+        </div>
+        <div class="cr-cta-inner cr-reveal">
             <span class="cr-label">Ready to Create?</span>
             <h2>Your Story<br>Has a Page Count.</h2>
             <p>Tell us about your manga project — we'll respond within 24 hours with a brief and chapter plan.</p>
@@ -374,33 +895,273 @@
     </footer>
 
     <script>
-        const lenis = new Lenis();
-        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-        requestAnimationFrame(raf);
+    /* ══════════════════════════════════════════════
+       AnimHaus Manga — Premium Scroll Experience
+       GSAP 3 + Lenis + ScrollTrigger
+    ══════════════════════════════════════════════ */
 
-        const navbar = document.querySelector('nav');
-        const logotype = document.querySelector('.logotype');
-        window.addEventListener('scroll', () => {
-            const st = window.pageYOffset || document.documentElement.scrollTop;
-            if (st > 80) { navbar.classList.add('scrolled'); if (logotype) logotype.classList.add('hidden'); }
-            else { navbar.classList.remove('scrolled'); if (logotype) logotype.classList.remove('hidden'); }
+    /* ── 1. Lenis smooth scroll, connected to GSAP ticker ── */
+    const lenis = new Lenis({ lerp: 0.075, smoothWheel: true });
+    gsap.registerPlugin(ScrollTrigger);
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+    gsap.ticker.lagSmoothing(0);
+
+    /* ── 2. Scroll progress bar ── */
+    const progressBar = document.getElementById('scroll-progress');
+    window.addEventListener('scroll', () => {
+        const p = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+        progressBar.style.transform = `scaleX(${p})`;
+        // Navbar
+        const nav = document.querySelector('nav');
+        const logo = document.querySelector('.logotype');
+        nav.classList.toggle('scrolled', window.scrollY > 100);
+        if (logo) logo.classList.toggle('hidden', window.scrollY > 100);
+    });
+
+    /* ── 3. Word-split utility ── */
+    function wordSplit(el) {
+        function walk(node) {
+            if (node.nodeType === 3) {
+                const parts = node.textContent.split(/(\s+)/);
+                const frag = document.createDocumentFragment();
+                parts.forEach(p => {
+                    if (!p.trim()) { frag.appendChild(document.createTextNode(p)); return; }
+                    const outer = document.createElement('span');
+                    outer.className = 'word-wrap';
+                    const inner = document.createElement('span');
+                    inner.className = 'word';
+                    inner.textContent = p;
+                    outer.appendChild(inner);
+                    frag.appendChild(outer);
+                });
+                node.parentNode.replaceChild(frag, node);
+            } else if (node.nodeType === 1 && !['SCRIPT','STYLE'].includes(node.tagName)) {
+                [...node.childNodes].forEach(walk);
+            }
+        }
+        walk(el);
+    }
+
+    /* ── 4. Hero: word-by-word title reveal + panel collage stagger ── */
+    const heroTitle = document.querySelector('.cr-hero-title');
+    if (heroTitle) {
+        wordSplit(heroTitle);
+        gsap.set('.cr-hero-title .word', { yPercent: 115 });
+    }
+    const heroTl = gsap.timeline({ delay: 0.15 });
+    heroTl
+        .to('.cr-hero-title .word', { yPercent: 0, duration: 1.25, stagger: 0.07, ease: 'expo.out' })
+        .from('.cr-hero-eyebrow', { y: 18, opacity: 0, duration: 0.8, ease: 'power3.out' }, 0.08)
+        .from('.cr-hero-sub',     { y: 28, opacity: 0, duration: 1.0, ease: 'power3.out' }, 0.4)
+        .from('.cr-hero-ctas a',  { y: 16, opacity: 0, stagger: 0.1, duration: 0.7, ease: 'power3.out' }, 0.62)
+        .from('.cr-trust-item',   { y: 24, opacity: 0, stagger: 0.07, duration: 0.7, ease: 'power3.out' }, 0.75)
+        /* panel collage: slide from different directions */
+        .from('.mp-1', { x: -60, opacity: 0, duration: 1.2, ease: 'expo.out' }, 0.25)
+        .from('.mp-2', { y: -50, opacity: 0, duration: 1.0, ease: 'expo.out' }, 0.45)
+        .from('.mp-3', { x:  60, opacity: 0, duration: 1.0, ease: 'expo.out' }, 0.58);
+
+    /* ── 5. Hero parallax — visual panel grid + glow ── */
+    gsap.to('.cr-hero-visual', {
+        yPercent: 18, ease: 'none',
+        scrollTrigger: { trigger: '#cr-hero', start: 'top top', end: 'bottom top', scrub: 1.5 }
+    });
+    gsap.to('.cr-hero-glow', {
+        yPercent: -55, scale: 1.3, ease: 'none',
+        scrollTrigger: { trigger: '#cr-hero', start: 'top top', end: 'bottom top', scrub: 2 }
+    });
+    gsap.to('.cr-hero-glow-left', {
+        yPercent: 40, ease: 'none',
+        scrollTrigger: { trigger: '#cr-hero', start: 'top top', end: 'bottom top', scrub: 2.5 }
+    });
+
+    /* ── 6. Section labels — slide in from left ── */
+    gsap.utils.toArray('.cr-label').forEach(el => {
+        gsap.from(el, {
+            x: -28, opacity: 0, duration: 0.8, ease: 'power3.out',
+            scrollTrigger: { trigger: el, start: 'top 92%' }
         });
+    });
 
-        gsap.registerPlugin(ScrollTrigger);
-        gsap.from(".cr-hero-title", { y: 80, opacity: 0, duration: 1.4, ease: "power4.out", delay: 0.3 });
-        gsap.from(".cr-hero-eyebrow, .cr-hero-sub, .cr-hero-ctas", { y: 40, opacity: 0, duration: 1.2, stagger: 0.15, ease: "power3.out", delay: 0.6 });
-
-        document.querySelectorAll('.cr-reveal').forEach(el => {
-            ScrollTrigger.create({ trigger: el, start: "top 88%", onEnter: () => el.classList.add('active') });
+    /* ── 7. Section header h2 — clip-path word wipe ── */
+    gsap.utils.toArray('.cr-section-header h2').forEach(h2 => {
+        wordSplit(h2);
+        gsap.set(h2.querySelectorAll('.word'), { yPercent: 110 });
+        ScrollTrigger.create({
+            trigger: h2,
+            start: 'top 88%',
+            onEnter: () => {
+                gsap.to(h2.querySelectorAll('.word'), {
+                    yPercent: 0, duration: 1.1, stagger: 0.06, ease: 'expo.out'
+                });
+                // also reveal the parent .cr-section-header
+                h2.closest('.cr-section-header')?.classList.add('active');
+            }
         });
+    });
 
-        document.querySelectorAll('a[href^="#"]').forEach(link => {
-            link.addEventListener('click', e => {
-                e.preventDefault();
-                const target = document.querySelector(link.getAttribute('href'));
-                if (target) lenis.scrollTo(target, { offset: -80 });
+    /* ── 8. Visual strip — parallax on images ── */
+    gsap.utils.toArray('.cr-strip-item').forEach((item, i) => {
+        gsap.fromTo(item.querySelector('img'),
+            { yPercent: -12 },
+            { yPercent: 12, ease: 'none',
+              scrollTrigger: { trigger: item, start: 'top bottom', end: 'bottom top', scrub: 1 } }
+        );
+        gsap.from(item.querySelector('.cr-strip-overlay'), {
+            y: 32, opacity: 0, duration: 0.9, ease: 'power3.out',
+            scrollTrigger: { trigger: item, start: 'top 78%' }
+        });
+    });
+
+    /* ── 9. Pinned horizontal gallery (all 20 pages) ── */
+    const galleryTrack = document.querySelector('.cr-gallery-track');
+    if (galleryTrack) {
+        ScrollTrigger.refresh();
+        gsap.to(galleryTrack, {
+            x: () => -(galleryTrack.scrollWidth - window.innerWidth + 1),
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '#cr-gallery',
+                pin: true,
+                pinType: 'transform',
+                scrub: 1,
+                start: 'top top',
+                end: () => '+=' + (galleryTrack.scrollWidth - window.innerWidth),
+                invalidateOnRefresh: true
+            }
+        });
+        /* Gallery label parallax */
+        gsap.from('.cr-gallery-label', {
+            opacity: 0, y: 20, duration: 1, ease: 'power3.out',
+            scrollTrigger: { trigger: '#cr-gallery', start: 'top 80%' }
+        });
+    }
+
+    /* ── 10. Process steps — stagger slide ── */
+    gsap.from('.cr-step', {
+        x: -36, opacity: 0, duration: 0.9, stagger: 0.1, ease: 'expo.out',
+        scrollTrigger: { trigger: '.cr-process-steps', start: 'top 82%' }
+    });
+    /* remove CSS reveal on steps (GSAP handles it) */
+    document.querySelectorAll('.cr-step').forEach(el => {
+        el.classList.remove('cr-reveal','cr-reveal-delay-1','cr-reveal-delay-2','cr-reveal-delay-3');
+        el.style.opacity = '1'; el.style.transform = 'none'; el.style.transition = 'none';
+    });
+
+    /* ── 11. Pricing tiers — 3-D tilt-in ── */
+    document.querySelectorAll('.cr-tier').forEach(el => {
+        el.classList.remove('cr-reveal','cr-reveal-delay-1','cr-reveal-delay-2');
+        el.style.transition = 'none';
+        el.style.transform = 'none';
+    });
+    gsap.from('.cr-tier', {
+        y: 70, opacity: 0, rotateX: 8,
+        transformPerspective: 1000, transformOrigin: 'top center',
+        duration: 1.1, stagger: 0.13, ease: 'expo.out',
+        scrollTrigger: {
+            trigger: '.cr-pricing-grid', start: 'top 90%',
+            invalidateOnRefresh: true, once: true
+        }
+    });
+
+    /* ── 12. Why grid — scale + stagger ── */
+    document.querySelectorAll('.cr-why-item').forEach(el => {
+        el.classList.remove('cr-reveal','cr-reveal-delay-1','cr-reveal-delay-2','cr-reveal-delay-3');
+        el.style.transition = 'none';
+        el.style.transform = 'none';
+    });
+    gsap.from('.cr-why-item', {
+        scale: 0.87, opacity: 0, duration: 0.75,
+        stagger: { each: 0.055, from: 'start' }, ease: 'power3.out',
+        scrollTrigger: {
+            trigger: '.cr-why-grid', start: 'top 90%',
+            invalidateOnRefresh: true, once: true
+        }
+    });
+
+    /* ── 13. CTA diagonal carousel — handled by CSS animation ── */
+
+    /* ── 14. CTA — title word split + fade ── */
+    const ctaH2 = document.querySelector('#cr-cta h2');
+    if (ctaH2) {
+        wordSplit(ctaH2);
+        gsap.set('#cr-cta h2 .word', { yPercent: 115 });
+        gsap.to('#cr-cta h2 .word', {
+            yPercent: 0, duration: 1.2, stagger: 0.09, ease: 'expo.out',
+            scrollTrigger: { trigger: ctaH2, start: 'top 85%' }
+        });
+    }
+    gsap.from('#cr-cta .cr-label', { x: -28, opacity: 0, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: '#cr-cta', start: 'top 85%' } });
+    gsap.from('#cr-cta p, #cr-cta .cr-cta-btns', {
+        y: 24, opacity: 0, stagger: 0.14, duration: 0.9, ease: 'power3.out',
+        scrollTrigger: { trigger: '#cr-cta', start: 'top 78%' }
+    });
+
+    /* ── 15. Magnetic buttons ── */
+    document.querySelectorAll('.cr-btn-primary, .cr-btn-secondary').forEach(btn => {
+        btn.addEventListener('mousemove', e => {
+            const r = btn.getBoundingClientRect();
+            gsap.to(btn, {
+                x: (e.clientX - r.left - r.width  / 2) * 0.22,
+                y: (e.clientY - r.top  - r.height / 2) * 0.22,
+                duration: 0.35, ease: 'power2.out'
             });
         });
+        btn.addEventListener('mouseleave', () => {
+            gsap.to(btn, { x: 0, y: 0, duration: 0.65, ease: 'elastic.out(1, 0.55)' });
+        });
+    });
+
+    /* ── 15. Style cards — stagger from parent trigger (post-pin safe) ── */
+    document.querySelectorAll('.cr-style-item').forEach(el => {
+        el.classList.remove('cr-reveal','cr-reveal-delay-1','cr-reveal-delay-2','cr-reveal-delay-3');
+    });
+    gsap.from('.cr-style-item', {
+        y: 52, opacity: 0, duration: 0.95, stagger: 0.12, ease: 'expo.out',
+        scrollTrigger: {
+            trigger: '.cr-styles-grid',
+            start: 'top 85%',
+            invalidateOnRefresh: true
+        }
+    });
+
+    /* ── 16. Create cards — clip-path wipe reveal ── */
+    document.querySelectorAll('.cr-create-card').forEach((el, i) => {
+        el.classList.remove('cr-reveal','cr-reveal-delay-1','cr-reveal-delay-2','cr-reveal-delay-3');
+        gsap.set(el, { clipPath: 'inset(0 0 100% 0)', opacity: 1 });
+        gsap.to(el, {
+            clipPath: 'inset(0 0 0% 0)', duration: 0.85, ease: 'expo.out',
+            scrollTrigger: { trigger: el, start: 'top 86%' }
+        });
+    });
+
+    /* ── 17. Footer columns slide up ── */
+    gsap.from('.cr-footer-col', {
+        y: 36, opacity: 0, stagger: 0.1, duration: 0.9, ease: 'power3.out',
+        scrollTrigger: { trigger: '.cr-footer-grid', start: 'top 90%' }
+    });
+
+    /* ── 18. Fallback: CSS reveal for remaining .cr-reveal elements ── */
+    document.querySelectorAll('.cr-reveal').forEach(el => {
+        ScrollTrigger.create({
+            trigger: el, start: 'top 88%',
+            onEnter: () => el.classList.add('active')
+        });
+    });
+
+    /* ── 19. Smooth anchor scroll ── */
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            const t = document.querySelector(link.getAttribute('href'));
+            if (t) lenis.scrollTo(t, { offset: -80 });
+        });
+    });
+
+    /* ── Refresh after fonts + images (double-rAF ensures pin scroll distance is computed first) ── */
+    window.addEventListener('load', () => {
+        requestAnimationFrame(() => requestAnimationFrame(() => ScrollTrigger.refresh()));
+    });
     </script>
 </body>
 </html>

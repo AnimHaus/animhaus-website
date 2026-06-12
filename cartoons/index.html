@@ -77,14 +77,55 @@
             <div class="cr-trust-item"><strong>Custom</strong><span>Every Frame</span></div>
             <div class="cr-trust-item"><strong>India-HQ</strong><span>Global Reach</span></div>
         </div>
+
+        <div class="cr-hero-visual">
+            <img src="cartoons/cartoon_1.jpg" alt="Original cartoon by AnimHaus" class="cr-hero-img" loading="lazy">
+            <span class="cr-hero-img-label">Original Art</span>
+        </div>
+    </section>
+
+    <div class="cr-divider"></div>
+
+    <!-- WORK GALLERY -->
+    <section id="cr-work" class="cr-section" style="padding-bottom: 0; padding-top: 4rem;">
+        <div class="cr-section-header cr-reveal">
+            <span class="cr-label">Portfolio</span>
+            <h2>Work From<br>The Studio.</h2>
+            <p>Original cartoon artwork — every frame drawn, coloured, and composed in-house by the AnimHaus team.</p>
+        </div>
+        <div class="cr-work-full-grid">
+            <div class="cr-work-panel cr-reveal">
+                <img src="cartoons/cartoon_1.jpg" alt="AnimHaus cartoon — Lazy Afternoon" loading="lazy">
+                <div class="cr-work-panel-overlay">
+                    <span class="cr-work-panel-num">Work 01</span>
+                    <h4>Lazy Afternoon</h4>
+                    <p>Single-panel editorial cartoon. Character design &amp; environment illustration.</p>
+                </div>
+            </div>
+            <div class="cr-work-panel cr-reveal cr-reveal-delay-1">
+                <img src="cartoons/cartoon_2.jpg" alt="AnimHaus cartoon — The Thinker" loading="lazy">
+                <div class="cr-work-panel-overlay">
+                    <span class="cr-work-panel-num">Work 02</span>
+                    <h4>The Thinker</h4>
+                    <p>Social commentary through character design. Economic satire in illustrated form.</p>
+                </div>
+            </div>
+            <div class="cr-work-panel cr-work-panel-wide cr-reveal cr-reveal-delay-2">
+                <img src="cartoons/cartoon_3.jpg" alt="AnimHaus cartoon — By the River" loading="lazy">
+                <div class="cr-work-panel-overlay">
+                    <span class="cr-work-panel-num">Work 03</span>
+                    <h4>By the River</h4>
+                    <p>Multi-character scene composition with full environment design and narrative depth.</p>
+                </div>
+            </div>
+        </div>
     </section>
 
     <div class="cr-divider"></div>
 
     <!-- WHAT WE CREATE -->
-    <section id="cr-create" class="cr-section">
+    <section id="cr-create" class="cr-section" style="padding-bottom: 0;">
         <div class="cr-section-header cr-reveal">
-            <span class="cr-label">Our Scope</span>
             <h2>What We<br>Create.</h2>
             <p>Every cartoon we produce starts with a story worth telling — and ends with something audiences can't look away from.</p>
         </div>
@@ -165,8 +206,24 @@
 
     <div class="cr-divider"></div>
 
+    <!-- CINEMATIC SHOWCASE -->
+    <section id="cr-showcase">
+        <div class="cr-showcase-inner">
+            <img src="cartoons/cartoon_3.jpg" alt="AnimHaus cartoon scene — By the River" class="cr-showcase-img" loading="lazy">
+            <div class="cr-showcase-overlay">
+                <div class="cr-showcase-caption cr-reveal">
+                    <span class="cr-label">Scene Design</span>
+                    <h3>Every Frame<br>Tells a Story.</h3>
+                    <p>Rich environments, dynamic characters, layered narrative detail — all crafted in-house by the AnimHaus team.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="cr-divider"></div>
+
     <!-- STYLE SPECTRUM -->
-    <section id="cr-styles" class="cr-section">
+    <section id="cr-styles" class="cr-section" style="padding-bottom: 0;">
         <div class="cr-section-header cr-reveal">
             <span class="cr-label">Art Direction</span>
             <h2>Every Style.<br>One Studio.</h2>
@@ -200,7 +257,7 @@
     <div class="cr-divider"></div>
 
     <!-- PACKAGES -->
-    <section id="cr-pricing" class="cr-section">
+    <section id="cr-pricing" class="cr-section" style="padding-bottom: 0;">
         <div class="cr-section-header cr-reveal">
             <span class="cr-label">Service Tiers</span>
             <h2>Built for Every<br>Scale of Project.</h2>
@@ -393,6 +450,41 @@
         document.querySelectorAll('.cr-reveal').forEach(el => {
             ScrollTrigger.create({ trigger: el, start: "top 88%", onEnter: () => el.classList.add('active') });
         });
+
+        // Hero image parallax
+        const heroVisual = document.querySelector('.cr-hero-visual');
+        if (heroVisual) {
+            gsap.to(heroVisual, {
+                y: 90,
+                ease: "none",
+                scrollTrigger: { trigger: '#cr-hero', start: "top top", end: "bottom top", scrub: true }
+            });
+        }
+
+
+
+        // Cinematic showcase parallax
+        const showcaseImg = document.querySelector('.cr-showcase-img');
+        if (showcaseImg) {
+            gsap.fromTo(showcaseImg,
+                { y: '0%' },
+                {
+                    y: '-10%',
+                    ease: "none",
+                    scrollTrigger: { trigger: '#cr-showcase', start: "top bottom", end: "bottom top", scrub: true }
+                }
+            );
+        }
+
+        // Clip-path reveal on showcase inner
+        gsap.fromTo('.cr-showcase-inner',
+            { clipPath: 'inset(6% 4% 6% 4%)' },
+            {
+                clipPath: 'inset(0% 0% 0% 0%)',
+                ease: "none",
+                scrollTrigger: { trigger: '#cr-showcase', start: "top 85%", end: "top 30%", scrub: 1 }
+            }
+        );
 
         document.querySelectorAll('a[href^="#"]').forEach(link => {
             link.addEventListener('click', e => {
