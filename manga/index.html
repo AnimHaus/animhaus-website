@@ -39,11 +39,22 @@
         .cr-hero-split {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 48px;
+            gap: 32px;
             width: 100%;
             position: relative;
             z-index: 1;
-            margin-bottom: 48px;
+            margin-bottom: 32px;
+        }
+        @media (max-width: 767px) {
+            .cr-hero-ctas {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .cr-hero-ctas a {
+                text-align: center;
+                justify-content: center;
+                width: 100%;
+            }
         }
         @media (min-width: 1024px) {
             .cr-hero-split {
@@ -55,7 +66,7 @@
 
         /* ── Manga panel collage ── */
         .cr-hero-visual { display: none; }
-        @media (min-width: 1024px) { .cr-hero-visual { display: block; } }
+        @media (min-width: 1024px) { .cr-hero-visual { display: block; transform: translateY(-125px); } }
 
         .cr-manga-panel-grid {
             display: grid;
@@ -121,8 +132,9 @@
         .cr-strip-item {
             position: relative;
             overflow: hidden;
-            min-height: 260px;
+            min-height: 220px;
         }
+        @media (min-width: 480px) { .cr-strip-item { min-height: 300px; } }
         @media (min-width: 768px) { .cr-strip-item { min-height: auto; } }
         .cr-strip-item img {
             width: 100%; height: 100%;
@@ -169,7 +181,10 @@
             transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
         }
         .cr-style-item:hover .cr-style-img img { transform: scale(1.06); }
-        .cr-style-content { padding: 28px 28px 32px; }
+        .cr-style-content { padding: 20px 20px 24px; }
+        @media (min-width: 768px) {
+            .cr-style-content { padding: 28px 28px 32px; }
+        }
         .cr-style-content i {
             font-size: 1.4rem;
             color: var(--red);
@@ -338,6 +353,27 @@
             position: relative;
             background: var(--black);
         }
+        @media (max-width: 767px) {
+            #cr-gallery {
+                height: 72vh;
+                overflow-x: auto;
+                overflow-y: hidden;
+                -webkit-overflow-scrolling: touch;
+                scroll-snap-type: x mandatory;
+            }
+            .cr-gallery-track {
+                flex-direction: row !important;
+                height: 100%;
+                gap: 2px;
+                padding-top: 0;
+            }
+            .cr-gallery-item {
+                width: 80vw;
+                height: 100%;
+                flex-shrink: 0;
+                scroll-snap-align: start;
+            }
+        }
         .cr-gallery-label {
             position: absolute;
             top: 36px;
@@ -349,6 +385,12 @@
         }
         @media (min-width: 768px)  { .cr-gallery-label { left: 8%;  } }
         @media (min-width: 1280px) { .cr-gallery-label { left: 10%; } }
+        @media (max-width: 767px)  {
+            .cr-gallery-label {
+                top: 16px;
+                left: 16px;
+            }
+        }
         .cr-gallery-label > span {
             font-size: 0.6rem;
             letter-spacing: 5px;
@@ -385,6 +427,7 @@
             display: block;
             transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
         }
+        .cr-gallery-item { cursor: zoom-in; }
         .cr-gallery-item:hover img { transform: scale(1.04); }
         .cr-gallery-num {
             position: absolute;
@@ -457,12 +500,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="cr-hero-trust">
-            <div class="cr-trust-item"><strong>Original</strong><span>Every Story</span></div>
-            <div class="cr-trust-item"><strong>Print &</strong><span>Digital Ready</span></div>
-            <div class="cr-trust-item"><strong>Full</strong><span>Art Pipeline</span></div>
-            <div class="cr-trust-item"><strong>India-HQ</strong><span>Global Distribution</span></div>
         </div>
     </section>
 
@@ -571,7 +608,6 @@
     <!-- PROCESS -->
     <section id="cr-process" class="cr-section">
         <div class="cr-section-header cr-reveal">
-            <span class="cr-label">How We Work</span>
             <h2>From Script<br>to Page.</h2>
             <p>Sequential art is a craft of pacing, tension, and visual rhythm. Our process is designed to honour all three.</p>
         </div>
@@ -630,12 +666,99 @@
         </div>
     </section>
 
-    <div class="cr-divider"></div>
+    <!-- LIGHTBOX -->
+    <div id="mg-lightbox" aria-modal="true" role="dialog" aria-label="Manga page viewer">
+        <button id="mg-lb-close" aria-label="Close">&times;</button>
+        <button id="mg-lb-prev" aria-label="Previous page"><i class="fas fa-chevron-left"></i></button>
+        <button id="mg-lb-next" aria-label="Next page"><i class="fas fa-chevron-right"></i></button>
+        <div id="mg-lb-stage">
+            <img id="mg-lb-img" src="" alt="">
+        </div>
+        <div id="mg-lb-counter"></div>
+    </div>
+
+    <style>
+        #mg-lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0,0,0,0.96);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        #mg-lightbox.open { display: flex; }
+        #mg-lb-stage {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+        }
+        #mg-lb-stage.grabbing { cursor: grabbing; }
+        #mg-lb-img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+            transform-origin: 0 0;
+            transition: opacity 0.15s ease;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        #mg-lb-close {
+            position: absolute;
+            top: 18px; right: 22px;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            font-size: 2.2rem;
+            line-height: 1;
+            cursor: pointer;
+            z-index: 2;
+            padding: 4px 10px;
+            transition: color 0.2s;
+        }
+        #mg-lb-close:hover { color: #fff; }
+        #mg-lb-prev, #mg-lb-next {
+            position: absolute;
+            top: 50%; transform: translateY(-50%);
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.7);
+            font-size: 1.4rem;
+            cursor: pointer;
+            padding: 14px 18px;
+            z-index: 2;
+            transition: background 0.2s, color 0.2s;
+            border-radius: 3px;
+        }
+        #mg-lb-prev:hover, #mg-lb-next:hover { background: rgba(255,255,255,0.18); color: #fff; }
+        #mg-lb-prev { left: 16px; }
+        #mg-lb-next { right: 16px; }
+        #mg-lb-counter {
+            position: absolute;
+            bottom: 18px;
+            left: 50%; transform: translateX(-50%);
+            font-size: 0.6rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.35);
+            pointer-events: none;
+        }
+        @media (max-width: 600px) {
+            #mg-lb-prev { left: 6px; padding: 10px 12px; }
+            #mg-lb-next { right: 6px; padding: 10px 12px; }
+        }
+    </style>
 
     <!-- ART STYLES -->
-    <section id="cr-styles" class="cr-section">
+    <section id="cr-styles" class="cr-section" style="padding-bottom: 0;">
         <div class="cr-section-header cr-reveal">
-            <span class="cr-label">Art Direction</span>
             <h2>Style &<br>Aesthetic Range.</h2>
             <p>Our artists work across the full spectrum of manga visual language — from highly detailed realism to expressive loose linework.</p>
         </div>
@@ -683,8 +806,6 @@
             </div>
         </div>
     </section>
-
-    <div class="cr-divider"></div>
 
     <!-- PACKAGES -->
     <section id="cr-pricing" class="cr-section">
@@ -754,10 +875,8 @@
         </div>
     </section>
 
-    <div class="cr-divider"></div>
-
     <!-- WHY -->
-    <section id="cr-why" class="cr-section">
+    <section id="cr-why" class="cr-section" style="padding-top: 0;">
         <div class="cr-section-header cr-reveal">
             <span class="cr-label">Our Differentiators</span>
             <h2>Why Creators<br>Choose AnimHaus.</h2>
@@ -860,37 +979,31 @@
     </section>
 
     <!-- FOOTER -->
-    <footer class="cr-footer">
-        <div class="cr-footer-grid">
-            <div class="cr-footer-brand">
-                <img src="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/animhaus-logo-mascot.png" alt="AnimHaus" style="height:48px">
-                <p>A high-octane creative collective. Cartoons, anime, manga, comics, games, and digital systems — built from Kolkata.</p>
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <img src="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/animhaus-logo-mascot.png" alt="logo-type"
+                    class="logomascot">
                 <p class="brand-signature">Human-crafted. No AI shortcuts.</p>
             </div>
-            <div class="cr-footer-col">
-                <h4>Creative Services</h4>
-                <a href="/cartoons">Cartoons</a>
-                <a href="/anime">Anime</a>
-                <a href="/manga">Manga</a>
-                <a href="/comics">Comics</a>
-                <a href="/games">Games</a>
+            <div class="footer-col">
+                <h3>Contact</h3>
+                <p>appleboy285@gmail.com</p>
             </div>
-            <div class="cr-footer-col">
-                <h4>Company</h4>
-                <a href="/">AnimHaus Studio</a>
-                <a href="/#team">The Team</a>
+            <div class="footer-col">
+                <h3>Services</h3>
                 <a href="/web-systems">Digital Infrastructure</a>
+                <a href="/web-systems#sr-pricing">Packages &amp; Pricing</a>
+                <a href="/web-systems#sr-retainer">Managed Support</a>
             </div>
-            <div class="cr-footer-col">
-                <h4>Reach Us</h4>
-                <a href="mailto:appleboy285@gmail.com">appleboy285@gmail.com</a>
+            <div class="footer-col">
+                <h3>Follow us on</h3>
                 <a href="https://www.behance.net/appleboycussdem" target="_blank" rel="noopener noreferrer">Behance</a>
                 <a href="https://www.youtube.com/@appleboycussdem" target="_blank" rel="noopener noreferrer">YouTube</a>
             </div>
         </div>
-        <div class="cr-footer-bottom">
-            <span>© 2026 AnimHaus. All rights reserved.</span>
-            <a href="/">← Back to studio</a>
+        <div class="footer-bottom">
+            © 2026 THE ANIMHAUS COLLECTION. ALL RIGHTS RESERVED.
         </div>
     </footer>
 
@@ -1015,7 +1128,7 @@
 
     /* ── 9. Pinned horizontal gallery (all 20 pages) ── */
     const galleryTrack = document.querySelector('.cr-gallery-track');
-    if (galleryTrack) {
+    if (galleryTrack && window.innerWidth >= 768) {
         ScrollTrigger.refresh();
         gsap.to(galleryTrack, {
             x: () => -(galleryTrack.scrollWidth - window.innerWidth + 1),
@@ -1023,17 +1136,23 @@
             scrollTrigger: {
                 trigger: '#cr-gallery',
                 pin: true,
-                pinType: 'transform',
-                scrub: 1,
+                scrub: 0.5,
                 start: 'top top',
                 end: () => '+=' + (galleryTrack.scrollWidth - window.innerWidth),
-                invalidateOnRefresh: true
+                invalidateOnRefresh: true,
+                anticipatePin: 1
             }
         });
         /* Gallery label parallax */
         gsap.from('.cr-gallery-label', {
             opacity: 0, y: 20, duration: 1, ease: 'power3.out',
             scrollTrigger: { trigger: '#cr-gallery', start: 'top 80%' }
+        });
+    } else if (galleryTrack) {
+        /* Mobile: simple fade-in for label */
+        gsap.from('.cr-gallery-label', {
+            opacity: 0, y: 20, duration: 1, ease: 'power3.out',
+            scrollTrigger: { trigger: '#cr-gallery', start: 'top 85%' }
         });
     }
 
@@ -1048,18 +1167,18 @@
         el.style.opacity = '1'; el.style.transform = 'none'; el.style.transition = 'none';
     });
 
-    /* ── 11. Pricing tiers — 3-D tilt-in ── */
+    /* ── 11. Pricing tiers — slide up stagger ── */
     document.querySelectorAll('.cr-tier').forEach(el => {
         el.classList.remove('cr-reveal','cr-reveal-delay-1','cr-reveal-delay-2');
         el.style.transition = 'none';
         el.style.transform = 'none';
+        el.style.opacity = '1';
     });
     gsap.from('.cr-tier', {
-        y: 70, opacity: 0, rotateX: 8,
-        transformPerspective: 1000, transformOrigin: 'top center',
-        duration: 1.1, stagger: 0.13, ease: 'expo.out',
+        y: 60, opacity: 0,
+        duration: 1.0, stagger: 0.15, ease: 'expo.out',
         scrollTrigger: {
-            trigger: '.cr-pricing-grid', start: 'top 90%',
+            trigger: '.cr-pricing-grid', start: 'top 85%',
             invalidateOnRefresh: true, once: true
         }
     });
@@ -1148,6 +1267,164 @@
             onEnter: () => el.classList.add('active')
         });
     });
+
+    /* ── 19. Lightbox ── */
+    (function () {
+        const lb        = document.getElementById('mg-lightbox');
+        const lbImg     = document.getElementById('mg-lb-img');
+        const lbCounter = document.getElementById('mg-lb-counter');
+        const lbStage   = document.getElementById('mg-lb-stage');
+        const items     = Array.from(document.querySelectorAll('.cr-gallery-item'));
+        let current = 0;
+
+        /* zoom / pan state */
+        let scale = 1, tx = 0, ty = 0;
+        let isDragging = false, startX = 0, startY = 0, originTx = 0, originTy = 0;
+
+        function clamp(val, min, max) { return Math.max(min, Math.min(max, val)); }
+
+        function applyTransform(transition) {
+            lbImg.style.transition = transition ? 'transform 0.2s ease' : 'none';
+            lbImg.style.transform = `matrix(${scale},0,0,${scale},${tx},${ty})`;
+        }
+
+        function resetZoom() { scale = 1; tx = 0; ty = 0; applyTransform(true); }
+
+        function clampPan() {
+            const sw = lbImg.naturalWidth  * scale;
+            const sh = lbImg.naturalHeight * scale;
+            const vw = lbStage.clientWidth;
+            const vh = lbStage.clientHeight;
+            const maxX = Math.max(0, (sw - vw) / 2);
+            const maxY = Math.max(0, (sh - vh) / 2);
+            tx = clamp(tx, -maxX, maxX);
+            ty = clamp(ty, -maxY, maxY);
+        }
+
+        function show(index) {
+            current = (index + items.length) % items.length;
+            const src = items[current].querySelector('img').src;
+            lbImg.style.opacity = '0';
+            lbImg.src = src;
+            resetZoom();
+            lbImg.onload = () => { lbImg.style.opacity = '1'; };
+            lbCounter.textContent = (current + 1) + ' / ' + items.length;
+        }
+
+        function open(index) {
+            lb.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            if (lenis) lenis.stop();
+            show(index);
+        }
+
+        function close() {
+            lb.classList.remove('open');
+            document.body.style.overflow = '';
+            if (lenis) lenis.start();
+            resetZoom();
+        }
+
+        items.forEach((item, i) => {
+            item.addEventListener('click', () => open(i));
+        });
+
+        document.getElementById('mg-lb-close').addEventListener('click', close);
+        document.getElementById('mg-lb-prev').addEventListener('click', () => { resetZoom(); show(current - 1); });
+        document.getElementById('mg-lb-next').addEventListener('click', () => { resetZoom(); show(current + 1); });
+
+        /* Click backdrop (not image) to close */
+        lb.addEventListener('click', e => { if (e.target === lb || e.target === lbStage) close(); });
+
+        /* Keyboard */
+        document.addEventListener('keydown', e => {
+            if (!lb.classList.contains('open')) return;
+            if (e.key === 'Escape')      close();
+            if (e.key === 'ArrowLeft')  { resetZoom(); show(current - 1); }
+            if (e.key === 'ArrowRight') { resetZoom(); show(current + 1); }
+        });
+
+        /* Mouse wheel zoom */
+        lbStage.addEventListener('wheel', e => {
+            e.preventDefault();
+            const rect  = lbImg.getBoundingClientRect();
+            const ox = e.clientX - rect.left - rect.width  / 2;
+            const oy = e.clientY - rect.top  - rect.height / 2;
+            const delta = e.deltaY < 0 ? 1.15 : 0.87;
+            const newScale = clamp(scale * delta, 1, 6);
+            const ratio = newScale / scale;
+            tx = (tx - ox) * ratio + ox;
+            ty = (ty - oy) * ratio + oy;
+            scale = newScale;
+            if (scale === 1) { tx = 0; ty = 0; }
+            else clampPan();
+            applyTransform(false);
+        }, { passive: false });
+
+        /* Mouse drag pan */
+        lbStage.addEventListener('mousedown', e => {
+            if (scale <= 1) return;
+            isDragging = true;
+            startX = e.clientX; startY = e.clientY;
+            originTx = tx; originTy = ty;
+            lbStage.classList.add('grabbing');
+        });
+        window.addEventListener('mousemove', e => {
+            if (!isDragging) return;
+            tx = originTx + (e.clientX - startX);
+            ty = originTy + (e.clientY - startY);
+            clampPan();
+            applyTransform(false);
+        });
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+            lbStage.classList.remove('grabbing');
+        });
+
+        /* Touch pinch-to-zoom + drag */
+        let touches = [], initDist = 0, initScale = 1, initTx = 0, initTy = 0, initMidX = 0, initMidY = 0;
+        lbStage.addEventListener('touchstart', e => {
+            touches = Array.from(e.touches);
+            if (touches.length === 2) {
+                initDist  = Math.hypot(touches[1].clientX - touches[0].clientX, touches[1].clientY - touches[0].clientY);
+                initScale = scale; initTx = tx; initTy = ty;
+                const rect = lbImg.getBoundingClientRect();
+                initMidX = (touches[0].clientX + touches[1].clientX) / 2 - rect.left - rect.width  / 2;
+                initMidY = (touches[0].clientY + touches[1].clientY) / 2 - rect.top  - rect.height / 2;
+            } else if (touches.length === 1 && scale > 1) {
+                startX = touches[0].clientX; startY = touches[0].clientY;
+                originTx = tx; originTy = ty;
+            }
+        }, { passive: true });
+        lbStage.addEventListener('touchmove', e => {
+            touches = Array.from(e.touches);
+            if (touches.length === 2) {
+                e.preventDefault();
+                const dist = Math.hypot(touches[1].clientX - touches[0].clientX, touches[1].clientY - touches[0].clientY);
+                const newScale = clamp(initScale * dist / initDist, 1, 6);
+                const ratio = newScale / initScale;
+                tx = (initTx - initMidX) * ratio + initMidX;
+                ty = (initTy - initMidY) * ratio + initMidY;
+                scale = newScale;
+                if (scale === 1) { tx = 0; ty = 0; }
+                else clampPan();
+                applyTransform(false);
+            } else if (touches.length === 1 && scale > 1) {
+                e.preventDefault();
+                tx = originTx + (touches[0].clientX - startX);
+                ty = originTy + (touches[0].clientY - startY);
+                clampPan();
+                applyTransform(false);
+            }
+        }, { passive: false });
+        /* Double-tap to reset zoom */
+        let lastTap = 0;
+        lbStage.addEventListener('touchend', () => {
+            const now = Date.now();
+            if (now - lastTap < 300) resetZoom();
+            lastTap = now;
+        });
+    })();
 
     /* ── 19. Smooth anchor scroll ── */
     document.querySelectorAll('a[href^="#"]').forEach(link => {

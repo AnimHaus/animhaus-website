@@ -160,38 +160,47 @@
 
     <section id="works">
         <div class="outline-bg">GALLERY</div>
-        <h2>WORKS</h2>
-        <div class="works-grid">
-            <div class="work-card reveal">
-                <a href="/artwork/kdiae">
-                    <img src="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/kdiae/kdiae.avif"
-                        srcset="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/kdiae/kdiae.avif 1x,
-                                https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/kdiae/kdiae.webp 2x"
-                        alt="KDIAE" loading="lazy">
-                    <div class="work-info">
+        <div class="works-header">
+            <h2>OUR ACHIEVEMENTS</h2>
+            <p class="works-sub">Worlds built. Stories told. Legacies in progress.</p>
+        </div>
+        <div class="works-sticky-outer">
+            <div class="works-sticky-inner">
+                <div class="works-text-col">
+                    <div class="works-text-item" data-works-idx="0">
                         <h4>KDIAE</h4>
+                        <p>Character art and creature design for a dark fantasy universe. Worlds built from scratch, stories told through every detail.</p>
+                        <a href="/artwork/kdiae" class="work-cta">View Project <i class="fas fa-arrow-right"></i></a>
                     </div>
-                </a>
-            </div>
-            <div class="work-card reveal">
-                <a href="/artwork/westra">
-                    <img src="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/westra/westra.avif"
-                        srcset="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/westra/westra.avif 1x,
-                                https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/westra/westra.webp 2x"
-                        alt="Westra" loading="lazy">
-                    <div class="work-info">
+                    <div class="works-text-item" data-works-idx="1">
                         <h4>Westra</h4>
+                        <p>Visual identity and world-building for a streetwear brand. Every stitch, every graphic, every frame — intentional.</p>
+                        <a href="/artwork/westra" class="work-cta">View Project <i class="fas fa-arrow-right"></i></a>
                     </div>
-                </a>
-            </div>
-            <div class="work-card reveal">
-                <a href="/artwork/shurer-dhara">
-                    <img src="https://shurer-dhara.vercel.app/MFD.webp"
-                        alt="Shurer Dhara" loading="lazy">
-                    <div class="work-info">
+                    <div class="works-text-item" data-works-idx="2">
                         <h4>Shurer Dhara</h4>
+                        <p>A music and art fusion project blending visual storytelling with sound — crafted to move, linger, and resonate.</p>
+                        <a href="/artwork/shurer-dhara" class="work-cta">View Project <i class="fas fa-arrow-right"></i></a>
                     </div>
-                </a>
+                </div>
+                <div class="works-img-col">
+                    <div class="works-img-item" data-works-idx="0">
+                        <img src="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/kdiae/kdiae.avif"
+                            srcset="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/kdiae/kdiae.avif 1x,
+                                    https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/kdiae/kdiae.webp 2x"
+                            alt="KDIAE" loading="lazy">
+                    </div>
+                    <div class="works-img-item" data-works-idx="1">
+                        <img src="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/westra/westra.avif"
+                            srcset="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/westra/westra.avif 1x,
+                                    https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/westra/westra.webp 2x"
+                            alt="Westra" loading="lazy">
+                    </div>
+                    <div class="works-img-item" data-works-idx="2">
+                        <img src="https://shurer-dhara.vercel.app/MFD.webp"
+                            alt="Shurer Dhara" loading="lazy">
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -518,6 +527,48 @@
                 );
             });
         }
+
+        // Works scroll-lock reveal
+        (function () {
+            const outer = document.querySelector('.works-sticky-outer');
+            if (!outer || window.matchMedia('(max-width: 767px)').matches) return;
+
+            const textItems = gsap.utils.toArray('.works-text-item');
+            const imgItems  = gsap.utils.toArray('.works-img-item');
+            const count     = imgItems.length;
+
+            // Initial states — first item visible, rest hidden & clipped
+            gsap.set(textItems[0], { autoAlpha: 1, y: 0 });
+            gsap.set(textItems.slice(1), { autoAlpha: 0, y: 28 });
+            gsap.set(imgItems[0], { clipPath: 'inset(0% 0 0% 0 round 20px)' });
+            for (let i = 1; i < count; i++) {
+                gsap.set(imgItems[i], { clipPath: 'inset(100% 0 0% 0 round 20px)', zIndex: i });
+            }
+
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: outer,
+                    start: 'top top',
+                    end:   'bottom bottom',
+                    scrub: 1,
+                }
+            });
+
+            // Each step covers 1 timeline unit; count-1 steps total
+            for (let i = 1; i < count; i++) {
+                const base = i - 1;
+                // Outgoing text fades up
+                tl.to(textItems[i - 1], { autoAlpha: 0, y: -20, duration: 0.22, ease: 'power1.in' }, base + 0.18);
+                // Incoming image wipes in from bottom (top-inset collapses)
+                tl.fromTo(imgItems[i],
+                    { clipPath: 'inset(100% 0 0% 0 round 20px)' },
+                    { clipPath: 'inset(0%   0 0% 0 round 20px)', duration: 0.72, ease: 'power2.inOut' },
+                    base + 0.22
+                );
+                // Incoming text fades in from below
+                tl.to(textItems[i], { autoAlpha: 1, y: 0, duration: 0.22, ease: 'power1.out' }, base + 0.70);
+            }
+        })();
         // Showreel width transform on scroll
         const reel = document.querySelector(".video-container");
 

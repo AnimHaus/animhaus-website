@@ -37,6 +37,7 @@
     <link rel="stylesheet" href="services.css">
     <link rel="stylesheet" href="digital-marketing/dm.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- Lenis + GSAP -->
     <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
@@ -102,37 +103,228 @@
     <section id="sr-hero">
         <div class="sr-hero-noise"></div>
         <div class="sr-hero-glow"></div>
+
+        <!-- ── Flying platform orbs ── -->
+        <div class="dm-float-orbs">
+            <div class="dm-orb dm-orb--ig" style="--x:68%;--y:12%;--d:6s;--delay:0s"><i class="fab fa-instagram"></i></div>
+            <div class="dm-orb dm-orb--fb" style="--x:78%;--y:36%;--d:8s;--delay:-2s"><i class="fab fa-facebook-f"></i></div>
+            <div class="dm-orb dm-orb--yt" style="--x:60%;--y:58%;--d:7s;--delay:-1s"><i class="fab fa-youtube"></i></div>
+            <div class="dm-orb dm-orb--wa" style="--x:88%;--y:68%;--d:9s;--delay:-3s"><i class="fab fa-whatsapp"></i></div>
+            <div class="dm-orb dm-orb--pi" style="--x:72%;--y:82%;--d:6.5s;--delay:-4s"><i class="fab fa-pinterest-p"></i></div>
+            <div class="dm-orb dm-orb--li" style="--x:90%;--y:48%;--d:10s;--delay:-1.5s"><i class="fab fa-linkedin-in"></i></div>
+            <div class="dm-orb dm-orb--tk" style="--x:64%;--y:24%;--d:7.5s;--delay:-0.5s"><i class="fab fa-tiktok"></i></div>
+            <div class="dm-orb dm-orb--sn" style="--x:55%;--y:74%;--d:8.5s;--delay:-2.5s"><i class="fa fa-snapchat-ghost" aria-hidden="true"></i></div>
+            <div class="dm-metric-pill" style="--x:57%;--y:42%;--d:11s;--delay:-1s"><i class="fas fa-arrow-up"></i>+34% Reach</div>
+            <div class="dm-metric-pill" style="--x:74%;--y:57%;--d:9s;--delay:-3s"><i class="fas fa-heart"></i>12K Likes</div>
+            <div class="dm-metric-pill" style="--x:62%;--y:86%;--d:12s;--delay:-2s"><i class="fas fa-eye"></i>2.1M Views</div>
+        </div>
+
+        <!-- ── Decorative background blobs ── -->
+        <div class="dm-blob dm-blob--1"></div>
+        <div class="dm-blob dm-blob--2"></div>
+        <div class="dm-blob dm-blob--3"></div>
+
         <div class="sr-hero-content">
-            <h1 class="sr-hero-title">
-                Your Brand.<br>Every <em>Platform.</em><br>Real Growth.
-            </h1>
-            <p class="sr-hero-sub">We run your social presence end-to-end — content, strategy, community, and paid ads — so your brand grows while you focus on building your business.</p>
-            <div class="sr-hero-ctas">
-                <!-- <a href="/digital-marketing/#dm-pricing" class="sr-btn-primary">View Packages <i class="fas fa-arrow-right"></i></a> -->
-                <a href="mailto:appleboy285@gmail.com" class="sr-btn-secondary">Book a Call</a>
+            <!-- Left: text content -->
+            <div class="dm-hero-left">
+                <h1 class="sr-hero-title">
+                    Your Brand.<br>Every <em>Platform.</em><br>Real Growth.
+                </h1>
+                <p class="sr-hero-sub">We run your social presence end-to-end — content, strategy, community, and paid ads — so your brand grows while you focus on building your business.</p>
+                <div class="sr-hero-ctas">
+                    <!-- <a href="/digital-marketing/#dm-pricing" class="sr-btn-primary">View Packages <i class="fas fa-arrow-right"></i></a> -->
+                    <a href="mailto:appleboy285@gmail.com" class="sr-btn-secondary">Book a Call</a>
+                </div>
+                <div class="sr-hero-trust">
+                    <div class="sr-trust-item">
+                        <strong>3+</strong>
+                        <span>Platforms Managed</span>
+                    </div>
+                    <div class="sr-trust-item">
+                        <strong>Hyperlocal</strong>
+                        <span>Audience Targeting</span>
+                    </div>
+                    <div class="sr-trust-item">
+                        <strong>100%</strong>
+                        <span>Custom Content</span>
+                    </div>
+                    <div class="sr-trust-item">
+                        <strong>Monthly</strong>
+                        <span>Reporting</span>
+                    </div>
+                </div>
             </div>
-            <div class="sr-hero-trust">
-                <div class="sr-trust-item">
-                    <strong>3+</strong>
-                    <span>Platforms Managed</span>
+
+            <!-- Right: live stat cards (desktop only) -->
+            <div class="dm-hero-visual">
+                <div class="dm-stat-card dm-stat-card--ig">
+                    <div class="dm-stat-card-header">
+                        <div class="dm-stat-card-icon"><i class="fab fa-instagram"></i></div>
+                        <span>Instagram</span>
+                        <div class="dm-stat-card-live"><span class="dm-live-dot"></span>Live</div>
+                    </div>
+                    <div class="card-sparkline">
+                        <div class="bar" style="height:35%"></div>
+                        <div class="bar" style="height:50%"></div>
+                        <div class="bar" style="height:42%"></div>
+                        <div class="bar" style="height:65%"></div>
+                        <div class="bar" style="height:58%"></div>
+                        <div class="bar" style="height:75%"></div>
+                        <div class="bar" style="height:70%"></div>
+                        <div class="bar highlight" style="height:100%"></div>
+                    </div>
+                    <div class="dm-stat-card-numbers">
+                        <div class="dm-stat-num-item">
+                            <div class="dm-stat-big">+847%</div>
+                            <div class="dm-stat-label">Reach Growth</div>
+                        </div>
+                        <div class="dm-stat-num-item">
+                            <div class="dm-stat-big">12.4K</div>
+                            <div class="dm-stat-label">New Followers</div>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;">
+                        <div class="footer-delta"><i class="fas fa-arrow-up"></i> +847% reach</div>
+                        <div class="footer-period">vs last month</div>
+                    </div>
                 </div>
-                <div class="sr-trust-item">
-                    <strong>Hyperlocal</strong>
-                    <span>Audience Targeting</span>
+                <div class="dm-stat-card dm-stat-card--meta">
+                    <div class="dm-stat-card-header">
+                        <div class="dm-stat-card-icon"><i class="fab fa-facebook-f"></i></div>
+                        <span>Meta Suite</span>
+                        <div class="dm-stat-card-live"><span class="dm-live-dot"></span>Live</div>
+                    </div>
+                    <div class="dm-stat-card-plats">
+                        <div class="dm-stat-card-plat dm-stat-card-plat--fb"><i class="fab fa-facebook-f"></i></div>
+                        <div class="dm-stat-card-plat dm-stat-card-plat--ig"><i class="fab fa-instagram"></i></div>
+                        <div class="dm-stat-card-plat dm-stat-card-plat--wa"><i class="fab fa-whatsapp"></i></div>
+                    </div>
+                    <div class="card-sparkline">
+                        <div class="bar" style="height:45%"></div>
+                        <div class="bar" style="height:55%"></div>
+                        <div class="bar" style="height:48%"></div>
+                        <div class="bar" style="height:72%"></div>
+                        <div class="bar" style="height:62%"></div>
+                        <div class="bar" style="height:80%"></div>
+                        <div class="bar" style="height:68%"></div>
+                        <div class="bar highlight" style="height:100%"></div>
+                    </div>
+                    <div class="dm-stat-card-numbers">
+                        <div class="dm-stat-num-item">
+                            <div class="dm-stat-big">3.2M</div>
+                            <div class="dm-stat-label">Total Reach</div>
+                        </div>
+                        <div class="dm-stat-num-item">
+                            <div class="dm-stat-big">94K</div>
+                            <div class="dm-stat-label">Engagements</div>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;">
+                        <div class="footer-delta"><i class="fas fa-arrow-up"></i> +3.2M reach</div>
+                        <div class="footer-period">vs last month</div>
+                    </div>
                 </div>
-                <div class="sr-trust-item">
-                    <strong>100%</strong>
-                    <span>Custom Content</span>
-                </div>
-                <div class="sr-trust-item">
-                    <strong>Monthly</strong>
-                    <span>Reporting</span>
+                <div class="dm-stat-card dm-stat-card--yt">
+                    <div class="dm-stat-card-header">
+                        <div class="dm-stat-card-icon"><i class="fab fa-youtube"></i></div>
+                        <span>YouTube</span>
+                        <div class="dm-stat-card-live"><span class="dm-live-dot"></span>Live</div>
+                    </div>
+                    <div class="card-sparkline">
+                        <div class="bar" style="height:30%"></div>
+                        <div class="bar" style="height:45%"></div>
+                        <div class="bar" style="height:38%"></div>
+                        <div class="bar" style="height:60%"></div>
+                        <div class="bar" style="height:55%"></div>
+                        <div class="bar" style="height:78%"></div>
+                        <div class="bar" style="height:65%"></div>
+                        <div class="bar highlight" style="height:100%"></div>
+                    </div>
+                    <div class="dm-stat-card-numbers">
+                        <div class="dm-stat-num-item">
+                            <div class="dm-stat-big">2.1M</div>
+                            <div class="dm-stat-label">Views / Month</div>
+                        </div>
+                        <div class="dm-stat-num-item">
+                            <div class="dm-stat-big">+320%</div>
+                            <div class="dm-stat-label">Watch Time</div>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;">
+                        <div class="footer-delta"><i class="fas fa-arrow-up"></i> +320% watch time</div>
+                        <div class="footer-period">vs last month</div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <div class="sr-divider"></div>
+
+    <!-- =============================================
+         TICKER
+         ============================================= -->
+    <div class="dm-ticker">
+        <div class="dm-ticker-track">
+            <span class="dm-ticker-item dm-ticker-item--ig"><i class="fab fa-instagram"></i> Instagram</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--fb"><i class="fab fa-facebook-f"></i> Facebook</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--wa"><i class="fab fa-whatsapp"></i> WhatsApp</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--yt"><i class="fab fa-youtube"></i> YouTube</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--pi"><i class="fab fa-pinterest-p"></i> Pinterest</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--li"><i class="fab fa-linkedin-in"></i> LinkedIn</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--tk"><i class="fab fa-tiktok"></i> TikTok</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--sn"><i class="fa fa-snapchat-ghost"></i> Snapchat</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--star"><i class="fas fa-star"></i> Social Media</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--star"><i class="fas fa-bolt"></i> Meta Ads</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--star"><i class="fas fa-pen-nib"></i> Content Creation</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--star"><i class="fas fa-chart-line"></i> Brand Growth</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--star"><i class="fas fa-bullseye"></i> Analytics</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--star"><i class="fas fa-users"></i> Community</span>
+            <span class="dm-ticker-sep">✦</span>
+            <!-- duplicate for seamless loop -->
+            <span class="dm-ticker-item dm-ticker-item--ig"><i class="fab fa-instagram"></i> Instagram</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--fb"><i class="fab fa-facebook-f"></i> Facebook</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--wa"><i class="fab fa-whatsapp"></i> WhatsApp</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--yt"><i class="fab fa-youtube"></i> YouTube</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--pi"><i class="fab fa-pinterest-p"></i> Pinterest</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--li"><i class="fab fa-linkedin-in"></i> LinkedIn</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--tk"><i class="fab fa-tiktok"></i> TikTok</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--sn"><i class="fa fa-snapchat-ghost"></i> Snapchat</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--star"><i class="fas fa-star"></i> Social Media</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--star"><i class="fas fa-bolt"></i> Meta Ads</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--star"><i class="fas fa-pen-nib"></i> Content Creation</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--star"><i class="fas fa-chart-line"></i> Brand Growth</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--star"><i class="fas fa-bullseye"></i> Analytics</span>
+            <span class="dm-ticker-sep">✦</span>
+            <span class="dm-ticker-item dm-ticker-item--star"><i class="fas fa-users"></i> Community</span>
+            <span class="dm-ticker-sep">✦</span>
+        </div>
+    </div>
 
 
     <!-- =============================================
@@ -220,7 +412,7 @@
         <div class="dm-platforms-grid">
 
             <div class="dm-platform-card sr-reveal">
-                <div class="dm-platform-icon">
+                <div class="dm-platform-icon dm-platform-icon--fb">
                     <i class="fab fa-facebook-f"></i>
                 </div>
                 <div class="dm-platform-info">
@@ -231,7 +423,7 @@
             </div>
 
             <div class="dm-platform-card sr-reveal sr-reveal-delay-1">
-                <div class="dm-platform-icon">
+                <div class="dm-platform-icon dm-platform-icon--ig">
                     <i class="fab fa-instagram"></i>
                 </div>
                 <div class="dm-platform-info">
@@ -242,7 +434,7 @@
             </div>
 
             <div class="dm-platform-card sr-reveal sr-reveal-delay-2">
-                <div class="dm-platform-icon">
+                <div class="dm-platform-icon dm-platform-icon--wa">
                     <i class="fab fa-whatsapp"></i>
                 </div>
                 <div class="dm-platform-info">
@@ -253,7 +445,7 @@
             </div>
 
             <div class="dm-platform-card sr-reveal sr-reveal-delay-3">
-                <div class="dm-platform-icon">
+                <div class="dm-platform-icon dm-platform-icon--yt">
                     <i class="fab fa-youtube"></i>
                 </div>
                 <div class="dm-platform-info">
@@ -264,7 +456,7 @@
             </div>
 
             <div class="dm-platform-card sr-reveal sr-reveal-delay-4">
-                <div class="dm-platform-icon">
+                <div class="dm-platform-icon dm-platform-icon--pi">
                     <i class="fab fa-pinterest-p"></i>
                 </div>
                 <div class="dm-platform-info">
@@ -275,7 +467,7 @@
             </div>
 
             <div class="dm-platform-card dm-platform-card--custom sr-reveal sr-reveal-delay-5">
-                <div class="dm-platform-icon">
+                <div class="dm-platform-icon dm-platform-icon--more">
                     <i class="fas fa-plus"></i>
                 </div>
                 <div class="dm-platform-info">
@@ -561,27 +753,31 @@
     <!-- =============================================
          FOOTER
          ============================================= -->
-    <footer class="sr-footer">
-        <div class="sr-footer-grid">
-            <div class="sr-footer-brand">
-                <a href="/">
-                    <img src="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/animhaus-logo-mascot.png" alt="AnimHaus" style="height: 48px;">
-                </a>
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <img src="https://pub-936a2a79cb9b473fabc46e4ad35a3e2e.r2.dev/animhaus-logo-mascot.png" alt="logo-type"
+                    class="logomascot">
                 <p class="brand-signature">Human-crafted. No AI shortcuts.</p>
             </div>
-            <div class="sr-footer-col">
+            <div class="footer-col">
                 <h3>Contact</h3>
                 <p>appleboy285@gmail.com</p>
             </div>
-            <div class="sr-footer-col">
-                <h3>Other Services</h3>
+            <div class="footer-col">
+                <h3>Services</h3>
                 <a href="/web-systems">Digital Infrastructure</a>
-                <a href="/cartoons">Cartoons</a>
-                <a href="/anime">Anime</a>
+                <a href="/web-systems#sr-pricing">Packages &amp; Pricing</a>
+                <a href="/web-systems#sr-retainer">Managed Support</a>
+            </div>
+            <div class="footer-col">
+                <h3>Follow us on</h3>
+                <a href="https://www.behance.net/appleboycussdem" target="_blank" rel="noopener noreferrer">Behance</a>
+                <a href="https://www.youtube.com/@appleboycussdem" target="_blank" rel="noopener noreferrer">YouTube</a>
             </div>
         </div>
 
-        <div class="sr-footer-bottom">
+        <div class="footer-bottom">
             © 2026 THE ANIMHAUS COLLECTION. ALL RIGHTS RESERVED.
         </div>
     </footer>
