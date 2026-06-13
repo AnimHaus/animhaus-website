@@ -503,7 +503,7 @@ section {
 }
 
 @media (min-width: 768px) {
-    .works-sticky-inner { padding: 0 8%; }
+    .works-sticky-inner { padding: 0 5%; }
 }
 
 .works-text-col {
@@ -601,20 +601,22 @@ section {
     display: block;
 }
 
-/* Mobile fallback — simple stacked list */
-@media (max-width: 767px) {
+/* works-img-label hidden on desktop (text col handles it) */
+.works-img-label {
+    display: none;
+}
+
+/* Mobile + tablet — sticky scroll-lock, label above image */
+@media (max-width: 1023px) {
     .works-sticky-outer {
-        height: auto;
+        margin: 0 -5%;
     }
 
     .works-sticky-inner {
-        position: static;
-        height: auto;
-        flex-direction: column;
-        gap: 32px;
-        padding: 0 5%;
-        overflow: visible;
-        align-items: flex-start;
+        gap: 0;
+        padding: 0;
+        align-items: center;
+        justify-content: center;
     }
 
     .works-text-col {
@@ -622,22 +624,74 @@ section {
     }
 
     .works-img-col {
+        flex: unset;
         width: 100%;
-        aspect-ratio: 16 / 9;
+        aspect-ratio: unset;
+        height: 100%;
+        border-radius: 0;
+        overflow: visible;
+        background: transparent;
+        position: relative;
     }
 
+    /* Each card: flex column — text above, image below */
     .works-img-item {
-        position: static;
-        border-radius: 16px;
-        overflow: hidden;
-        margin-bottom: 12px;
+        position: absolute;
+        inset: auto 0;
+        top: 50%;
+        transform: translateY(-50%);
+        border-radius: 0;
+        overflow: visible;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        height: auto;
     }
 
-    .works-img-item img {
+    .works-img-item::after {
+        display: none;
+    }
+
+    .works-img-label {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        position: static;
+        order: -1;
+        padding: 20px 5% 16px;
+        background: #fff;
+        z-index: 2;
+    }
+
+    .works-img-label h4 {
+        font-size: clamp(1.5rem, 6vw, 2rem);
+        font-weight: 900;
+        color: #111;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        letter-spacing: -0.5px;
+        margin: 0;
+        line-height: 1.1;
+    }
+
+    .works-img-label p {
+        font-size: 0.88rem;
+        line-height: 1.65;
+        color: rgba(17,17,17,0.5);
+        margin: 0;
+    }
+
+    .works-img-label .work-cta {
+        font-size: 0.65rem;
+        margin-top: 2px;
+    }
+
+    .works-img-item > img {
+        display: block;
         width: 100%;
         height: auto;
         aspect-ratio: 16 / 9;
         object-fit: cover;
+        flex-shrink: 0;
     }
 }
 

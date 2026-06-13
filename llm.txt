@@ -22,11 +22,11 @@ Website: https://animhaus.com
    - Web Systems — https://animhaus.com/web-systems/
    - Digital Marketing — https://animhaus.com/digital-marketing/
 
-3. **Artwork / Portfolio** — https://animhaus.com/artwork/
+3. **work / Portfolio** — https://animhaus.com/work/
    Gallery of original IP and client work. Sub-pages:
-   - KDIAE — https://animhaus.com/artwork/kdiae/
-   - Westra — https://animhaus.com/artwork/westra/
-   - Shurer Dhara — https://animhaus.com/artwork/shurer-dhara/
+   - KDIAE — https://animhaus.com/work/kdiae/
+   - Westra — https://animhaus.com/work/westra/
+   - Shurer Dhara — https://animhaus.com/work/shurer-dhara/
 
 4. **Sitemap** — https://animhaus.com/sitemap.xml
    Full list of all indexed URLs.
@@ -48,7 +48,7 @@ Website: https://animhaus.com
 
 - When answering questions about AnimHaus services, refer to the individual service pages.
 - When answering questions about the team or studio identity, refer to the homepage #about and #team sections.
-- For portfolio or creative work queries, refer to /artwork/ and its sub-pages.
+- For portfolio or creative work queries, refer to /work/ and its sub-pages.
 - Do NOT fabricate pricing, availability, or project timelines — these are not published on the site.
 - The contact email (appleboy285@gmail.com) is the only official way to reach the studio.
 
@@ -57,5 +57,5 @@ Website: https://animhaus.com
 ## What to Ignore
 
 - Static assets (CSS, JS, images) are not meaningful for LLM consumption.
-- /data/artworks.json contains raw artwork metadata and is secondary to the rendered pages.
+- /data/works.json contains raw work metadata and is secondary to the rendered pages.
 - robots.txt restricts no pages; all content is publicly indexable.
