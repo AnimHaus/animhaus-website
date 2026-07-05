@@ -14,6 +14,21 @@
       "Outcome": "Unified digital identity connecting professor profile, schools, and Music for Development initiative"
     }
   },
+  "awakynn": {
+    "title": "Awakynn",
+    "tagline": "A calm, ritual-led digital home for a modern yoga, meditation, and Ayurveda practice.",
+    "year": "2026",
+    "category": "Web Systems · Wellness",
+    "theme": "Yoga & Meditation · Ayurveda · Community Wellness",
+    "description": "For Awakynn, we built a calm, trust-first web experience for a yoga, meditation, and Ayurvedic wellness practice led by instructor Monalisa Manna. The site translates the depth of the practice into transparent offerings, instructor credibility, authentic testimonials, and a connected wellness ecosystem spanning sister brands GrabFabs, Festiq, and Éstrá Ritual.",
+    "cover": "https://cdn.awakynn.com/hero1.avif",
+    "credits": {
+      "Client": "Awakynn",
+      "Delivery": "AnimHaus Studios",
+      "Scope": "UX Direction · Content Architecture · Frontend Build · Offerings & Booking Presentation",
+      "Outcome": "A ritual-paced digital studio connecting instructor trust, offerings, testimonials, and the wider Awakynn wellness ecosystem"
+    }
+  },
   "westra": {
     "title": "Westra Wear",
     "year": "2026",
