@@ -18,6 +18,14 @@ const MODEL_DEFS = [
   { url: CONTROLLER_URL, scale: 1.05, final: [ 0,   -1.8, 0] as [number,number,number], entry: [  0, -12,  0] as [number,number,number], rotY: 0 },
 ];
 
+// Mobile-only controller config: centered, used as background
+const MOBILE_CONTROLLER_DEF = {
+  url: CONTROLLER_URL,
+  scale: 3.0,
+  final: [0, 0, -1] as [number, number, number],
+  entry: [0, -12, -1] as [number, number, number],
+};
+
 function Model({
   url, scale, final, entry, visible, rotY = 0,
 }: {
@@ -68,7 +76,56 @@ function Model({
   );
 }
 
-function Scene({ visible }: { visible: boolean }) {
+function MobileController({
+  visible, scrollProgress,
+}: {
+  visible: boolean;
+  scrollProgress: number;
+}) {
+  const { scene } = useGLTF(MOBILE_CONTROLLER_DEF.url);
+  const group = useRef<THREE.Group>(null);
+  const { final, entry, scale } = MOBILE_CONTROLLER_DEF;
+  const pos = useRef<[number, number, number]>([
+    final[0] + entry[0],
+    final[1] + entry[1],
+    final[2] + entry[2],
+  ]);
+  const currentRotY = useRef(0);
+  const t = useRef(Math.random() * Math.PI * 2);
+
+  useFrame((_, delta) => {
+    if (!group.current) return;
+    t.current += delta;
+
+    const targetX = visible ? final[0] : final[0] + entry[0];
+    const targetY = visible ? final[1] : final[1] + entry[1];
+    const targetZ = visible ? final[2] : final[2] + entry[2];
+
+    const speed = Math.min(delta * 3.5, 1);
+    pos.current[0] = THREE.MathUtils.lerp(pos.current[0], targetX, speed);
+    pos.current[1] = THREE.MathUtils.lerp(pos.current[1], targetY, speed);
+    pos.current[2] = THREE.MathUtils.lerp(pos.current[2], targetZ, speed);
+
+    group.current.position.set(
+      pos.current[0],
+      pos.current[1] + (visible ? Math.sin(t.current * 0.6) * 0.08 : 0),
+      pos.current[2],
+    );
+
+    // Rotate up to 45° (PI/4) based on scroll progress
+    const targetRotY = scrollProgress * (Math.PI / 4);
+    currentRotY.current = THREE.MathUtils.lerp(currentRotY.current, targetRotY, Math.min(delta * 4, 1));
+    group.current.rotation.y = currentRotY.current;
+  });
+
+  return (
+    <group ref={group}>
+      <primitive object={scene} scale={scale} />
+    </group>
+  );
+}
+
+function Scene({ visible, isMobile, scrollProgress }: { visible: boolean; isMobile: boolean; scrollProgress: number }) {
   return (
     <>
       <ambientLight intensity={0.9} />
@@ -77,23 +134,27 @@ function Scene({ visible }: { visible: boolean }) {
       <pointLight position={[0, 3, 3]} intensity={1.1} color="#ffddaa" />
       <Environment preset="city" />
       <Suspense fallback={null}>
-        {MODEL_DEFS.map((m) => (
-          <Model
-            key={m.url}
-            url={m.url}
-            scale={m.scale}
-            final={m.final}
-            entry={m.entry}
-            visible={visible}
-            rotY={m.rotY}
-          />
-        ))}
+        {isMobile ? (
+          <MobileController visible={visible} scrollProgress={scrollProgress} />
+        ) : (
+          MODEL_DEFS.map((m) => (
+            <Model
+              key={m.url}
+              url={m.url}
+              scale={m.scale}
+              final={m.final}
+              entry={m.entry}
+              visible={visible}
+              rotY={m.rotY}
+            />
+          ))
+        )}
       </Suspense>
     </>
   );
 }
 
-export default function AboutCanvas({ visible }: { visible: boolean }) {
+export default function AboutCanvas({ visible, isMobile = false, scrollProgress = 0 }: { visible: boolean; isMobile?: boolean; scrollProgress?: number }) {
   return (
     <Canvas
       camera={{ position: [0, 0, 6.5], fov: 52 }}
@@ -103,7 +164,7 @@ export default function AboutCanvas({ visible }: { visible: boolean }) {
       style={{ width: '100%', height: '100%' }}
     >
       <Preload all />
-      <Scene visible={visible} />
+      <Scene visible={visible} isMobile={isMobile} scrollProgress={scrollProgress} />
     </Canvas>
   );
 }
