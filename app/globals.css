@@ -1,0 +1,156 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand:       #D91A21;
+  --color-brand-hover: #b81319;
+  --color-black:       #111111;
+  --color-white:       #ffffff;
+  --color-light:       #f9f9f9;
+  --color-service-1:   #d91a21;
+  --color-service-2:   #df373d;
+  --color-service-3:   #e65258;
+  --color-service-4:   #ed6d72;
+  --color-service-5:   #f48c90;
+  --color-service-6:   #f8acae;
+  --color-service-7:   #fbc8ca;
+}
+
+@layer base {
+  :root {
+    --white: #ffffff;
+    --black: #111111;
+    --red:   #D91A21;
+    --light: #f9f9f9;
+    --service-red-1: #d91a21;
+    --service-red-2: #df373d;
+    --service-red-3: #e65258;
+    --service-red-4: #ed6d72;
+    --service-red-5: #f48c90;
+    --service-red-6: #f8acae;
+    --service-red-7: #fbc8ca;
+  }
+
+  *, *::before, *::after {
+    margin: 0; padding: 0; box-sizing: border-box;
+    font-family: 'Geist', sans-serif;
+  }
+  html { overflow-x: clip; scrollbar-width: none; }
+  html::-webkit-scrollbar { display: none; }
+  html.lenis { height: auto; }
+  .lenis-smooth { scroll-behavior: auto !important; }
+  body { background-color: #fff; color: #111; line-height: 1.4; overflow-x: clip; }
+  h1, h2, h3, h4, h5, h6 { font-family: 'Plus Jakarta Sans', 'Geist', sans-serif; }
+
+  /* Keyframes used by inline animation styles */
+  @keyframes blink-animation {
+    0%, 90%, 100% { transform: scaleY(1); opacity: 1; }
+    94% { transform: scaleY(0.05); }
+  }
+  @keyframes works-grain {
+    0%   { background-position: 0 0; }
+    33%  { background-position: -28px 18px; }
+    66%  { background-position: 22px -16px; }
+    100% { background-position: -12px 30px; }
+  }
+  @keyframes dm-float {
+    0%   { transform: translate(0,0) rotate(0deg); }
+    25%  { transform: translate(8px,-12px) rotate(4deg); }
+    50%  { transform: translate(-6px,8px) rotate(-3deg); }
+    75%  { transform: translate(10px,4px) rotate(5deg); }
+    100% { transform: translate(0,0) rotate(0deg); }
+  }
+  @keyframes dm-blob-pulse {
+    0%, 100% { transform: scale(1) translate(0,0); opacity: 0.55; }
+    50%       { transform: scale(1.12) translate(-10px,10px); opacity: 0.35; }
+  }
+  @keyframes dm-ticker-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  @keyframes dm-pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.45; transform: scale(1.6); }
+  }
+  @keyframes mgMarquee  { from { transform: translateX(0); }    to { transform: translateX(-50%); } }
+  @keyframes ctaScrollUp   { from { transform: translateY(0); }    to { transform: translateY(-50%); } }
+  @keyframes ctaScrollDown { from { transform: translateY(-50%); } to { transform: translateY(0);    } }
+}
+
+@layer components {
+  /* ── Mascot eye blink ─────────────────────────────────── */
+  .mascot-eye {
+    transform-origin: center; transform-box: fill-box;
+    animation: blink-animation 4s infinite;
+  }
+
+  /* ── Services Stack ─────────────────────────────────── */
+  .service-row {
+    top: 76px;
+    padding: 28px 22px;
+    min-height: 80vh;
+    transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+  }
+  /* Mobile: no sticky, just flow vertically */
+  @media (max-width: 767px) {
+    .service-row {
+      min-height: 60vh;
+    }
+  }
+  .service-row:nth-child(1) { top:  76px; z-index: 1; }
+  .service-row:nth-child(2) { top:  86px; z-index: 2; }
+  .service-row:nth-child(3) { top:  96px; z-index: 3; }
+  .service-row:nth-child(4) { top: 106px; z-index: 4; }
+  .service-row:nth-child(5) { top: 116px; z-index: 5; }
+  .service-row:nth-child(6) { top: 126px; z-index: 6; }
+  .service-row:nth-child(7) { top: 136px; z-index: 7; }
+  @media (min-width: 768px) {
+    .service-row             { min-height: 80vh; padding: 36px 30px; margin-bottom: 14px; }
+    .service-row:nth-child(1) { top:  50px; }
+    .service-row:nth-child(2) { top:  66px; }
+    .service-row:nth-child(3) { top:  82px; }
+    .service-row:nth-child(4) { top:  98px; }
+    .service-row:nth-child(5) { top: 114px; }
+    .service-row:nth-child(6) { top: 130px; }
+    .service-row:nth-child(7) { top: 146px; }
+  }
+  @media (min-width: 1024px) {
+    .service-row { padding: 40px 34px; min-height: 80vh; }
+    .service-row:hover { filter: brightness(0.96); }
+  }
+
+  /* ── Team hover (cross-child hover impossible in Tailwind) ── */
+  #ab-card:hover .img-bw, #draunz-card:hover .img-bw { opacity: 0; }
+  #ab-card:hover .img-color, #draunz-card:hover .img-color { opacity: 1; transform: scale(1.05); }
+  #ab-card:hover .team-img-overlay, #draunz-card:hover .team-img-overlay { opacity: 1; transform: translateY(0); }
+
+  /* ── Works gallery hover ─────────────────────────────── */
+  .pg-item:hover .pg-item-label { opacity: 1; transform: translateY(0); }
+  .works-grain-overlay { animation: works-grain 3.2s steps(3, end) infinite; }
+  @media (prefers-reduced-motion: reduce) { .works-grain-overlay { animation: none; } }
+
+  /* ── JS-toggled upload box ───────────────────────────── */
+  .upload-box.has-file { border-color: #111 !important; border-style: solid !important; background: #f0f0f0 !important; }
+
+  /* ── Scroll-reveal (JS toggles .active) ─────────────── */
+  .cr-reveal, .sr-reveal {
+    opacity: 0; transform: translateY(2.25rem);
+    transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+  }
+  .cr-reveal.active, .sr-reveal.active { opacity: 1; transform: translateY(0); }
+  .cr-reveal-delay-1, .sr-reveal-delay-1 { transition-delay: 0.1s; }
+  .cr-reveal-delay-2, .sr-reveal-delay-2 { transition-delay: 0.2s; }
+  .cr-reveal-delay-3, .sr-reveal-delay-3 { transition-delay: 0.3s; }
+  .cr-reveal-delay-4, .sr-reveal-delay-4 { transition-delay: 0.4s; }
+  .cr-reveal-delay-5, .sr-reveal-delay-5 { transition-delay: 0.5s; }
+  .cr-reveal-delay-6, .sr-reveal-delay-6 { transition-delay: 0.6s; }
+
+  /* ── Manga GSAP word-split (elements created dynamically by JS) ── */
+  .word-wrap { display: inline-block; overflow: hidden; vertical-align: bottom; line-height: 1.05; }
+  .word { display: inline-block; }
+  .cr-hero-title .hero-red .word-wrap,
+  .cr-hero-title .hero-red .word { color: var(--red); }
+
+  /* ── Manga lightbox open state ───────────────────────── */
+  #mg-lightbox.open { display: flex !important; }
+  #mg-lb-stage.grabbing { cursor: grabbing !important; }
+}

@@ -1,0 +1,60 @@
+# AnimHaus Studios
+
+> AnimHaus Studios is a high-octane animation house and visual engineering studio based in Kolkata, India. We specialise in cinematic storytelling through anime, manga, comics, cartoons, games, web systems, and digital marketing.
+
+## About
+
+AnimHaus Studios (also known as Anim Haus, Anime Haus, Animation House) is a creative collective founded and based in Kolkata, West Bengal, India. We blend Japanese animation aesthetics with Indian narrative traditions to create emotionally resonant, visually engineered work for global audiences.
+
+Our core belief: every frame is a story, every story is a world.
+
+## Services
+
+- **Anime Production** — Original series, OVAs, music videos, and short films. Emotionally driven and cinematically crafted for global audiences.
+- **Manga & Sequential Art** — Original manga, webtoons, one-shots, graphic novels, and character concept art. Panel-perfect storytelling.
+- **Comics** — Western-format comics, graphic novel illustration, and storyboard production.
+- **Cartoons** — 2D animated cartoons, character design, rigging, and motion graphics.
+- **Games** — Game art, concept design, UI/UX for games, and interactive narrative design.
+- **Web Systems** — High-performance websites, web apps, and digital product design using Next.js, React, and modern web technologies.
+- **Digital Marketing** — Brand strategy, social media content, motion graphics for campaigns, and performance creatives.
+
+## Portfolio / Work
+
+Selected case studies:
+
+- **Awakynn** — Digital home for a yoga, meditation, and Ayurveda wellness practice. Calm, ritual-led UX. [https://animhaus.com/work/awakynn]
+- **Kdiae** — [https://animhaus.com/work/kdiae]
+- **Shurer Dhara** — [https://animhaus.com/work/shurer-dhara]
+- **Westra** — [https://animhaus.com/work/westra]
+
+Full portfolio gallery: [https://animhaus.com/work]
+
+## Key URLs
+
+- Homepage: https://animhaus.com
+- Anime: https://animhaus.com/anime
+- Manga: https://animhaus.com/manga
+- Comics: https://animhaus.com/comics
+- Cartoons: https://animhaus.com/cartoons
+- Games: https://animhaus.com/games
+- Web Systems: https://animhaus.com/web-systems
+- Digital Marketing: https://animhaus.com/digital-marketing
+- Work / Portfolio: https://animhaus.com/work
+- Sitemap: https://animhaus.com/sitemap.xml
+
+## Social & External Profiles
+
+- Behance: https://www.behance.net/appleboycussdem
+- YouTube: https://www.youtube.com/@appleboycussdem
+
+## Location
+
+Kolkata, West Bengal, India
+
+## Contact
+
+Website: https://animhaus.com
+
+## Licensing & Usage
+
+Content on animhaus.com is © AnimHaus Studios. Do not reproduce artwork, copy, or case study content without written permission.
