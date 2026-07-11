@@ -4,9 +4,9 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF, Preload, Environment } from '@react-three/drei';
 import * as THREE from 'three';
 
-const COMPUTER_URL   = 'https://cdn.animhaus.com/3D_models/Vintage_Computer.glb';
-const GAMEBOY_URL    = 'https://cdn.animhaus.com/3D_models/White_Nintendo_Game_Boy.glb';
-const CONTROLLER_URL = 'https://cdn.animhaus.com/3D_models/White_Xbox_Controller_texture.glb';
+const COMPUTER_URL   = '/cdn-proxy/3D_models/Vintage_Computer.glb';
+const GAMEBOY_URL    = '/cdn-proxy/3D_models/White_Nintendo_Game_Boy.glb';
+const CONTROLLER_URL = '/cdn-proxy/3D_models/White_Xbox_Controller_texture.glb';
 
 // final [x, y, z]  |  entry offset [dx, dy, dz]
 const MODEL_DEFS = [

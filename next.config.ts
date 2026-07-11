@@ -12,6 +12,14 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: "/cdn-proxy/:path*",
+        destination: "https://cdn.animhaus.com/:path*",
+      },
+    ];
+  },
 };
 
 export default nextConfig;
